@@ -1,0 +1,52 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 1
+  11              		.eabi_attribute 18, 4
+  12              		.file	"HANcoder_E407_GTSync_data.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.global	rtConstP
+  17              		.section	.rodata.rtConstP,"a",%progbits
+  18              		.align	2
+  21              	rtConstP:
+  22 0000 00       		.byte	0
+  23 0001 00       		.byte	0
+  24 0002 01       		.byte	1
+  25 0003 01       		.byte	1
+  26 0004 01       		.byte	1
+  27 0005 00       		.byte	0
+  28 0006 01       		.byte	1
+  29 0007 00       		.byte	0
+  30 0008 01       		.byte	1
+  31 0009 01       		.byte	1
+  32 000a 00       		.byte	0
+  33 000b 00       		.byte	0
+  34 000c 00       		.byte	0
+  35 000d 01       		.byte	1
+  36 000e 00       		.byte	0
+  37 000f 01       		.byte	1
+  38              		.text
+  39              	.Letext0:
+  40              		.file 1 "rtwtypes.h"
+  41              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+  42              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+  43              		.file 4 "../blockset/rtw/STM32/inc/STM32_E407/core_cm4.h"
+  44              		.file 5 "../blockset/rtw/STM32/inc/STM32_E407/system_stm32f4xx.h"
+  45              		.file 6 "../blockset/rtw/STM32/inc/STM32_E407/anin.h"
+  46              		.file 7 "HANcoder_E407_GTSync_types.h"
+  47              		.file 8 "HANcoder_E407_GTSync.h"
+  48              		.file 9 "HANcoder_E407_GTSync_data.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 HANcoder_E407_GTSync_data.c
+C:\Users\Jamie\AppData\Local\Temp\cc474B0t.s:21     .rodata.rtConstP:00000000 rtConstP
+C:\Users\Jamie\AppData\Local\Temp\cc474B0t.s:18     .rodata.rtConstP:00000000 $d
+
+NO UNDEFINED SYMBOLS

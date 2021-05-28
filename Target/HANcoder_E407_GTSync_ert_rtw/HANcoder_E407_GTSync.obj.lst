@@ -1,0 +1,1921 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 1
+  11              		.eabi_attribute 18, 4
+  12              		.file	"HANcoder_E407_GTSync.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4,"ax",%progbits
+  17              		.align	1
+  18              		.p2align 2,,3
+  19              		.global	TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4:
+  26              	.LFB114:
+  27              		.file 1 "HANcoder_E407_GTSync.c"
+   1:HANcoder_E407_GTSync.c **** /*
+   2:HANcoder_E407_GTSync.c ****  * Academic License - for use in teaching, academic research, and meeting
+   3:HANcoder_E407_GTSync.c ****  * course requirements at degree granting institutions only.  Not for
+   4:HANcoder_E407_GTSync.c ****  * government, commercial, or other organizational use.
+   5:HANcoder_E407_GTSync.c ****  *
+   6:HANcoder_E407_GTSync.c ****  * File: HANcoder_E407_GTSync.c
+   7:HANcoder_E407_GTSync.c ****  *
+   8:HANcoder_E407_GTSync.c ****  * Code generated for Simulink model 'HANcoder_E407_GTSync'.
+   9:HANcoder_E407_GTSync.c ****  *
+  10:HANcoder_E407_GTSync.c ****  * Model version                  : 1.160
+  11:HANcoder_E407_GTSync.c ****  * Simulink Coder version         : 9.0 (R2018b) 24-May-2018
+  12:HANcoder_E407_GTSync.c ****  * C/C++ source code generated on : Fri May 28 21:44:30 2021
+  13:HANcoder_E407_GTSync.c ****  *
+  14:HANcoder_E407_GTSync.c ****  * Target selection: ert.tlc
+  15:HANcoder_E407_GTSync.c ****  * Embedded hardware selection: Generic->32-bit Embedded Processor
+  16:HANcoder_E407_GTSync.c ****  * Code generation objectives: Unspecified
+  17:HANcoder_E407_GTSync.c ****  * Validation result: Not run
+  18:HANcoder_E407_GTSync.c ****  */
+  19:HANcoder_E407_GTSync.c **** 
+  20:HANcoder_E407_GTSync.c **** #include "HANcoder_E407_GTSync.h"
+  21:HANcoder_E407_GTSync.c **** #include "HANcoder_E407_GTSync_private.h"
+  22:HANcoder_E407_GTSync.c **** 
+  23:HANcoder_E407_GTSync.c **** /* map ByteSwap function */
+  24:HANcoder_E407_GTSync.c **** #define ByteSwap(x)                    (ByteSwap_x((uint8_t *) &x, sizeof(x)))
+  25:HANcoder_E407_GTSync.c **** 
+  26:HANcoder_E407_GTSync.c **** /* Named constants for Chart: '<S35>/Even_Tick' */
+  27:HANcoder_E407_GTSync.c **** #define IN_Even_tick                   ((uint8_T)1U)
+  28:HANcoder_E407_GTSync.c **** #define IN_NO_ACTIVE_CHILD             ((uint8_T)0U)
+  29:HANcoder_E407_GTSync.c **** #define IN_Rise_edge                   ((uint8_T)2U)
+  30:HANcoder_E407_GTSync.c **** 
+  31:HANcoder_E407_GTSync.c **** /* Named constants for Chart: '<S35>/Odd_Tick' */
+  32:HANcoder_E407_GTSync.c **** #define IN_Odd_tick                    ((uint8_T)1U)
+  33:HANcoder_E407_GTSync.c **** 
+  34:HANcoder_E407_GTSync.c **** void TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12(void);
+  35:HANcoder_E407_GTSync.c **** void TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4(void);
+  36:HANcoder_E407_GTSync.c **** 
+  37:HANcoder_E407_GTSync.c **** /* Exported block signals */
+  38:HANcoder_E407_GTSync.c **** real_T LED_local_ticks_signal;         /* '<S9>/Switch' */
+  39:HANcoder_E407_GTSync.c **** real_T simulation_time;                /* '<S6>/Digital Clock' */
+  40:HANcoder_E407_GTSync.c **** real_T id;                             /* '<S1>/Data Store Read' */
+  41:HANcoder_E407_GTSync.c **** uint32_T SI_FreeHeap;                  /* '<S57>/Level-2 M-file S-Function' */
+  42:HANcoder_E407_GTSync.c **** uint32_T SI_FreeStack;                 /* '<S58>/Level-2 M-file S-Function' */
+  43:HANcoder_E407_GTSync.c **** uint32_T local_ticks_interrupt;        /* '<S35>/Switch' */
+  44:HANcoder_E407_GTSync.c **** uint32_T tx_temp_counter;              /* '<S50>/Add' */
+  45:HANcoder_E407_GTSync.c **** uint8_T SI_CPUload;                    /* '<S56>/Level-2 M-file S-Function' */
+  46:HANcoder_E407_GTSync.c **** uint8_T bc;                            /* '<S42>/Data Store Read' */
+  47:HANcoder_E407_GTSync.c **** boolean_T LedValue;                    /* '<S2>/Data Type Conversion' */
+  48:HANcoder_E407_GTSync.c **** boolean_T odd;                         /* '<S35>/Odd_Tick' */
+  49:HANcoder_E407_GTSync.c **** boolean_T even;                        /* '<S35>/Even_Tick' */
+  50:HANcoder_E407_GTSync.c **** 
+  51:HANcoder_E407_GTSync.c **** /* Exported block parameters */
+  52:HANcoder_E407_GTSync.c **** boolean_T HANtuneOverride = 0;         /* Variable: HANtuneOverride
+  53:HANcoder_E407_GTSync.c ****                                         * Referenced by: '<S2>/Constant'
+  54:HANcoder_E407_GTSync.c ****                                         */
+  55:HANcoder_E407_GTSync.c **** 
+  56:HANcoder_E407_GTSync.c **** /* Block signals (default storage) */
+  57:HANcoder_E407_GTSync.c **** BlockIO rtB;
+  58:HANcoder_E407_GTSync.c **** 
+  59:HANcoder_E407_GTSync.c **** /* Block states (default storage) */
+  60:HANcoder_E407_GTSync.c **** D_Work rtDWork;
+  61:HANcoder_E407_GTSync.c **** 
+  62:HANcoder_E407_GTSync.c **** /* Previous zero-crossings (trigger) states */
+  63:HANcoder_E407_GTSync.c **** PrevZCSigStates rtPrevZCSigState;
+  64:HANcoder_E407_GTSync.c **** 
+  65:HANcoder_E407_GTSync.c **** /* Real-time model */
+  66:HANcoder_E407_GTSync.c **** RT_MODEL rtM_;
+  67:HANcoder_E407_GTSync.c **** RT_MODEL *const rtM = &rtM_;
+  68:HANcoder_E407_GTSync.c **** static void rate_scheduler(void);
+  69:HANcoder_E407_GTSync.c **** 
+  70:HANcoder_E407_GTSync.c **** /*
+  71:HANcoder_E407_GTSync.c ****  * Swaps the values of two bytes.
+  72:HANcoder_E407_GTSync.c ****  * a, b pointers to data values that need swapping
+  73:HANcoder_E407_GTSync.c ****  */
+  74:HANcoder_E407_GTSync.c **** static void swap(unsigned char *a, unsigned char *b)
+  75:HANcoder_E407_GTSync.c **** {
+  76:HANcoder_E407_GTSync.c ****   register char i = *a;
+  77:HANcoder_E407_GTSync.c ****   *a = *b;
+  78:HANcoder_E407_GTSync.c ****   *b = i;
+  79:HANcoder_E407_GTSync.c **** }                                      /*** end of swap ***/
+  80:HANcoder_E407_GTSync.c **** 
+  81:HANcoder_E407_GTSync.c **** /*
+  82:HANcoder_E407_GTSync.c ****  * Swaps all bytes in b. Typically used to fix endianes.
+  83:HANcoder_E407_GTSync.c ****  * b pointer to data with bytes to swap
+  84:HANcoder_E407_GTSync.c ****  * n number of bytes to swap
+  85:HANcoder_E407_GTSync.c ****  */
+  86:HANcoder_E407_GTSync.c **** void ByteSwap_x(uint8_t *b, size_t n)
+  87:HANcoder_E407_GTSync.c **** {
+  88:HANcoder_E407_GTSync.c ****   int i = 0;
+  89:HANcoder_E407_GTSync.c ****   int j = n-1;
+  90:HANcoder_E407_GTSync.c ****   while (i<j) {
+  91:HANcoder_E407_GTSync.c ****     swap(&b[i], &b[j]);
+  92:HANcoder_E407_GTSync.c ****     i++, j--;
+  93:HANcoder_E407_GTSync.c ****   }
+  94:HANcoder_E407_GTSync.c **** }
+  95:HANcoder_E407_GTSync.c **** 
+  96:HANcoder_E407_GTSync.c **** void TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12(void)
+  97:HANcoder_E407_GTSync.c **** {
+  98:HANcoder_E407_GTSync.c ****   /* Output and update for function-call system: '<S6>/Timer ISR handler' */
+  99:HANcoder_E407_GTSync.c ****   {
+ 100:HANcoder_E407_GTSync.c ****     uint32_T rtb_DataStoreRead;
+ 101:HANcoder_E407_GTSync.c ****     boolean_T rtb_AND_j;
+ 102:HANcoder_E407_GTSync.c **** 
+ 103:HANcoder_E407_GTSync.c ****     /* DataStoreRead: '<S35>/Data Store Read' */
+ 104:HANcoder_E407_GTSync.c ****     rtb_DataStoreRead = rtDWork.local_ticks_mem_IRQ;
+ 105:HANcoder_E407_GTSync.c **** 
+ 106:HANcoder_E407_GTSync.c ****     /* Switch: '<S35>/Switch' incorporates:
+ 107:HANcoder_E407_GTSync.c ****      *  Constant: '<S35>/Constant'
+ 108:HANcoder_E407_GTSync.c ****      *  DataStoreRead: '<S35>/Data Store Read'
+ 109:HANcoder_E407_GTSync.c ****      *  DataStoreRead: '<S35>/Data Store Read1'
+ 110:HANcoder_E407_GTSync.c ****      *  Sum: '<S35>/Sum'
+ 111:HANcoder_E407_GTSync.c ****      */
+ 112:HANcoder_E407_GTSync.c ****     if (rtB.Logic[0]) {
+ 113:HANcoder_E407_GTSync.c ****       local_ticks_interrupt = rtDWork.local_ticks_mem_IRQ + 1U;
+ 114:HANcoder_E407_GTSync.c ****     } else {
+ 115:HANcoder_E407_GTSync.c ****       local_ticks_interrupt = rtDWork.local_ticks_mem_IRQ;
+ 116:HANcoder_E407_GTSync.c ****     }
+ 117:HANcoder_E407_GTSync.c **** 
+ 118:HANcoder_E407_GTSync.c ****     /* End of Switch: '<S35>/Switch' */
+ 119:HANcoder_E407_GTSync.c **** 
+ 120:HANcoder_E407_GTSync.c ****     /* DataStoreWrite: '<S35>/Data Store Write' */
+ 121:HANcoder_E407_GTSync.c ****     rtDWork.local_ticks_mem_IRQ = local_ticks_interrupt;
+ 122:HANcoder_E407_GTSync.c **** 
+ 123:HANcoder_E407_GTSync.c ****     /* Chart: '<S35>/Even_Tick' */
+ 124:HANcoder_E407_GTSync.c ****     /* Gateway: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handl
+ 125:HANcoder_E407_GTSync.c ****     /* During: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handle
+ 126:HANcoder_E407_GTSync.c ****     if (rtDWork.bitsForTID1.is_active_c1_HANcoder_E407_GTSy == 0U) {
+ 127:HANcoder_E407_GTSync.c ****       /* Entry: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handl
+ 128:HANcoder_E407_GTSync.c ****       rtDWork.bitsForTID1.is_active_c1_HANcoder_E407_GTSy = 1U;
+ 129:HANcoder_E407_GTSync.c **** 
+ 130:HANcoder_E407_GTSync.c ****       /* Entry Internal: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer 
+ 131:HANcoder_E407_GTSync.c ****       /* Transition: '<S38>:2' */
+ 132:HANcoder_E407_GTSync.c ****       rtDWork.bitsForTID1.is_c1_HANcoder_E407_GTSync = IN_Even_tick;
+ 133:HANcoder_E407_GTSync.c **** 
+ 134:HANcoder_E407_GTSync.c ****       /* Entry 'Even_tick': '<S38>:1' */
+ 135:HANcoder_E407_GTSync.c ****       if (local_ticks_interrupt - ((local_ticks_interrupt >> 1) << 1) == 0U) {
+ 136:HANcoder_E407_GTSync.c ****         rtDWork.active_flag_a = 1.0;
+ 137:HANcoder_E407_GTSync.c ****       }
+ 138:HANcoder_E407_GTSync.c ****     } else if (rtDWork.bitsForTID1.is_c1_HANcoder_E407_GTSync == IN_Even_tick) {
+ 139:HANcoder_E407_GTSync.c ****       /* During 'Even_tick': '<S38>:1' */
+ 140:HANcoder_E407_GTSync.c ****       if (rtDWork.active_flag_a == 1.0) {
+ 141:HANcoder_E407_GTSync.c ****         /* Transition: '<S38>:5' */
+ 142:HANcoder_E407_GTSync.c ****         rtDWork.bitsForTID1.is_c1_HANcoder_E407_GTSync = IN_Rise_edge;
+ 143:HANcoder_E407_GTSync.c **** 
+ 144:HANcoder_E407_GTSync.c ****         /* Entry 'Rise_edge': '<S38>:3' */
+ 145:HANcoder_E407_GTSync.c ****         /* Event: '<S38>:6' */
+ 146:HANcoder_E407_GTSync.c ****         rtDWork.rise_edge_at_evenEventCounter++;
+ 147:HANcoder_E407_GTSync.c ****       } else {
+ 148:HANcoder_E407_GTSync.c ****         if (local_ticks_interrupt - ((local_ticks_interrupt >> 1) << 1) == 0U) {
+ 149:HANcoder_E407_GTSync.c ****           rtDWork.active_flag_a = 1.0;
+ 150:HANcoder_E407_GTSync.c ****         }
+ 151:HANcoder_E407_GTSync.c ****       }
+ 152:HANcoder_E407_GTSync.c ****     } else {
+ 153:HANcoder_E407_GTSync.c ****       /* During 'Rise_edge': '<S38>:3' */
+ 154:HANcoder_E407_GTSync.c ****       /* Event: '<S38>:6' */
+ 155:HANcoder_E407_GTSync.c ****       rtDWork.rise_edge_at_evenEventCounter++;
+ 156:HANcoder_E407_GTSync.c ****     }
+ 157:HANcoder_E407_GTSync.c **** 
+ 158:HANcoder_E407_GTSync.c ****     if (rtDWork.rise_edge_at_evenEventCounter > 0U) {
+ 159:HANcoder_E407_GTSync.c ****       even = !even;
+ 160:HANcoder_E407_GTSync.c ****       rtDWork.rise_edge_at_evenEventCounter--;
+ 161:HANcoder_E407_GTSync.c ****     }
+ 162:HANcoder_E407_GTSync.c **** 
+ 163:HANcoder_E407_GTSync.c ****     /* End of Chart: '<S35>/Even_Tick' */
+ 164:HANcoder_E407_GTSync.c **** 
+ 165:HANcoder_E407_GTSync.c ****     /* Outputs for Triggered SubSystem: '<S35>/Reset Free Running Counter1' */
+ 166:HANcoder_E407_GTSync.c ****     ResetFreeRunningCounter1(even, &rtPrevZCSigState.ResetFreeRunningCounter1_i);
+ 167:HANcoder_E407_GTSync.c **** 
+ 168:HANcoder_E407_GTSync.c ****     /* End of Outputs for SubSystem: '<S35>/Reset Free Running Counter1' */
+ 169:HANcoder_E407_GTSync.c **** 
+ 170:HANcoder_E407_GTSync.c ****     /* Chart: '<S35>/Odd_Tick' */
+ 171:HANcoder_E407_GTSync.c ****     /* Gateway: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handl
+ 172:HANcoder_E407_GTSync.c ****     /* During: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handle
+ 173:HANcoder_E407_GTSync.c ****     if (rtDWork.bitsForTID1.is_active_c3_HANcoder_E407_GTSy == 0U) {
+ 174:HANcoder_E407_GTSync.c ****       /* Entry: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handl
+ 175:HANcoder_E407_GTSync.c ****       rtDWork.bitsForTID1.is_active_c3_HANcoder_E407_GTSy = 1U;
+ 176:HANcoder_E407_GTSync.c **** 
+ 177:HANcoder_E407_GTSync.c ****       /* Entry Internal: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer 
+ 178:HANcoder_E407_GTSync.c ****       /* Transition: '<S39>:2' */
+ 179:HANcoder_E407_GTSync.c ****       rtDWork.bitsForTID1.is_c3_HANcoder_E407_GTSync = IN_Odd_tick;
+ 180:HANcoder_E407_GTSync.c **** 
+ 181:HANcoder_E407_GTSync.c ****       /* Entry 'Odd_tick': '<S39>:1' */
+ 182:HANcoder_E407_GTSync.c ****       if (local_ticks_interrupt - ((local_ticks_interrupt >> 1) << 1) == 1U) {
+ 183:HANcoder_E407_GTSync.c ****         rtDWork.active_flag = 1.0;
+ 184:HANcoder_E407_GTSync.c ****       }
+ 185:HANcoder_E407_GTSync.c ****     } else if (rtDWork.bitsForTID1.is_c3_HANcoder_E407_GTSync == IN_Odd_tick) {
+ 186:HANcoder_E407_GTSync.c ****       /* During 'Odd_tick': '<S39>:1' */
+ 187:HANcoder_E407_GTSync.c ****       if (rtDWork.active_flag == 1.0) {
+ 188:HANcoder_E407_GTSync.c ****         /* Transition: '<S39>:5' */
+ 189:HANcoder_E407_GTSync.c ****         rtDWork.bitsForTID1.is_c3_HANcoder_E407_GTSync = IN_Rise_edge;
+ 190:HANcoder_E407_GTSync.c **** 
+ 191:HANcoder_E407_GTSync.c ****         /* Entry 'Rise_edge': '<S39>:3' */
+ 192:HANcoder_E407_GTSync.c ****         /* Event: '<S39>:6' */
+ 193:HANcoder_E407_GTSync.c ****         rtDWork.rise_edge_at_oddEventCounter++;
+ 194:HANcoder_E407_GTSync.c ****       } else {
+ 195:HANcoder_E407_GTSync.c ****         if (local_ticks_interrupt - ((local_ticks_interrupt >> 1) << 1) == 1U) {
+ 196:HANcoder_E407_GTSync.c ****           rtDWork.active_flag = 1.0;
+ 197:HANcoder_E407_GTSync.c ****         }
+ 198:HANcoder_E407_GTSync.c ****       }
+ 199:HANcoder_E407_GTSync.c ****     } else {
+ 200:HANcoder_E407_GTSync.c ****       /* During 'Rise_edge': '<S39>:3' */
+ 201:HANcoder_E407_GTSync.c ****       /* Event: '<S39>:6' */
+ 202:HANcoder_E407_GTSync.c ****       rtDWork.rise_edge_at_oddEventCounter++;
+ 203:HANcoder_E407_GTSync.c ****     }
+ 204:HANcoder_E407_GTSync.c **** 
+ 205:HANcoder_E407_GTSync.c ****     if (rtDWork.rise_edge_at_oddEventCounter > 0U) {
+ 206:HANcoder_E407_GTSync.c ****       odd = !odd;
+ 207:HANcoder_E407_GTSync.c ****       rtDWork.rise_edge_at_oddEventCounter--;
+ 208:HANcoder_E407_GTSync.c ****     }
+ 209:HANcoder_E407_GTSync.c **** 
+ 210:HANcoder_E407_GTSync.c ****     /* End of Chart: '<S35>/Odd_Tick' */
+ 211:HANcoder_E407_GTSync.c **** 
+ 212:HANcoder_E407_GTSync.c ****     /* Outputs for Triggered SubSystem: '<S35>/Reset Free Running Counter2' */
+ 213:HANcoder_E407_GTSync.c ****     ResetFreeRunningCounter1(odd, &rtPrevZCSigState.ResetFreeRunningCounter2);
+ 214:HANcoder_E407_GTSync.c **** 
+ 215:HANcoder_E407_GTSync.c ****     /* End of Outputs for SubSystem: '<S35>/Reset Free Running Counter2' */
+ 216:HANcoder_E407_GTSync.c **** 
+ 217:HANcoder_E407_GTSync.c ****     /* If: '<S36>/True if end of basic cycle' */
+ 218:HANcoder_E407_GTSync.c ****     if (rtb_DataStoreRead == 50000U) {
+ 219:HANcoder_E407_GTSync.c ****       /* Outputs for IfAction SubSystem: '<S36>/Reset values' incorporates:
+ 220:HANcoder_E407_GTSync.c ****        *  ActionPort: '<S42>/Action Port'
+ 221:HANcoder_E407_GTSync.c ****        */
+ 222:HANcoder_E407_GTSync.c ****       /* DataStoreRead: '<S42>/Data Store Read' */
+ 223:HANcoder_E407_GTSync.c ****       bc = rtDWork.basic_cycle_count;
+ 224:HANcoder_E407_GTSync.c **** 
+ 225:HANcoder_E407_GTSync.c ****       /* Sum: '<S42>/Add' incorporates:
+ 226:HANcoder_E407_GTSync.c ****        *  Constant: '<S42>/Constant2'
+ 227:HANcoder_E407_GTSync.c ****        *  DataStoreWrite: '<S42>/Data Store Write2'
+ 228:HANcoder_E407_GTSync.c ****        */
+ 229:HANcoder_E407_GTSync.c ****       rtDWork.basic_cycle_count = (uint8_T)((uint32_T)bc + ((uint8_T)1U));
+ 230:HANcoder_E407_GTSync.c **** 
+ 231:HANcoder_E407_GTSync.c ****       /* DataStoreWrite: '<S42>/Data Store Write' incorporates:
+ 232:HANcoder_E407_GTSync.c ****        *  Constant: '<S42>/Constant1'
+ 233:HANcoder_E407_GTSync.c ****        */
+ 234:HANcoder_E407_GTSync.c ****       rtDWork.local_ticks_mem_IRQ = 0U;
+ 235:HANcoder_E407_GTSync.c **** 
+ 236:HANcoder_E407_GTSync.c ****       /* If: '<S42>/If' incorporates:
+ 237:HANcoder_E407_GTSync.c ****        *  DataStoreWrite: '<S42>/Data Store Write2'
+ 238:HANcoder_E407_GTSync.c ****        */
+ 239:HANcoder_E407_GTSync.c ****       if (rtDWork.basic_cycle_count == 2) {
+ 240:HANcoder_E407_GTSync.c ****         /* Outputs for IfAction SubSystem: '<S42>/If Action Subsystem' incorporates:
+ 241:HANcoder_E407_GTSync.c ****          *  ActionPort: '<S43>/Action Port'
+ 242:HANcoder_E407_GTSync.c ****          */
+ 243:HANcoder_E407_GTSync.c ****         /* DataStoreWrite: '<S43>/Data Store Write1' incorporates:
+ 244:HANcoder_E407_GTSync.c ****          *  Constant: '<S43>/Constant'
+ 245:HANcoder_E407_GTSync.c ****          */
+ 246:HANcoder_E407_GTSync.c ****         rtDWork.basic_cycle_count = ((uint8_T)0U);
+ 247:HANcoder_E407_GTSync.c **** 
+ 248:HANcoder_E407_GTSync.c ****         /* End of Outputs for SubSystem: '<S42>/If Action Subsystem' */
+ 249:HANcoder_E407_GTSync.c ****       }
+ 250:HANcoder_E407_GTSync.c **** 
+ 251:HANcoder_E407_GTSync.c ****       /* End of If: '<S42>/If' */
+ 252:HANcoder_E407_GTSync.c ****       /* End of Outputs for SubSystem: '<S36>/Reset values' */
+ 253:HANcoder_E407_GTSync.c ****     }
+ 254:HANcoder_E407_GTSync.c **** 
+ 255:HANcoder_E407_GTSync.c ****     /* End of If: '<S36>/True if end of basic cycle' */
+ 256:HANcoder_E407_GTSync.c **** 
+ 257:HANcoder_E407_GTSync.c ****     /* If: '<S48>/If' incorporates:
+ 258:HANcoder_E407_GTSync.c ****      *  Constant: '<S37>/ '
+ 259:HANcoder_E407_GTSync.c ****      *  Constant: '<S37>/BC0'
+ 260:HANcoder_E407_GTSync.c ****      *  Constant: '<S49>/Constant'
+ 261:HANcoder_E407_GTSync.c ****      *  DataStoreRead: '<S48>/Data Store Read'
+ 262:HANcoder_E407_GTSync.c ****      *  DataStoreRead: '<S48>/Data Store Read1'
+ 263:HANcoder_E407_GTSync.c ****      *  Logic: '<S48>/AND'
+ 264:HANcoder_E407_GTSync.c ****      *  Logic: '<S48>/AND1'
+ 265:HANcoder_E407_GTSync.c ****      *  RelationalOperator: '<S48>/Equal'
+ 266:HANcoder_E407_GTSync.c ****      *  RelationalOperator: '<S48>/Equal1'
+ 267:HANcoder_E407_GTSync.c ****      *  RelationalOperator: '<S49>/Compare'
+ 268:HANcoder_E407_GTSync.c ****      */
+ 269:HANcoder_E407_GTSync.c ****     if ((rtb_DataStoreRead == 25000U) && (0U == rtDWork.basic_cycle_count) &&
+ 270:HANcoder_E407_GTSync.c ****         (rtDWork.Board_ID == 0.0)) {
+ 271:HANcoder_E407_GTSync.c ****       /* Outputs for IfAction SubSystem: '<S48>/If Action Subsystem' incorporates:
+ 272:HANcoder_E407_GTSync.c ****        *  ActionPort: '<S50>/Action Port'
+ 273:HANcoder_E407_GTSync.c ****        */
+ 274:HANcoder_E407_GTSync.c ****       /* Sum: '<S50>/Add' incorporates:
+ 275:HANcoder_E407_GTSync.c ****        *  Constant: '<S50>/Constant'
+ 276:HANcoder_E407_GTSync.c ****        *  DataStoreRead: '<S50>/Data Store Read'
+ 277:HANcoder_E407_GTSync.c ****        */
+ 278:HANcoder_E407_GTSync.c ****       tx_temp_counter = rtDWork.tx_temp_count + 1U;
+ 279:HANcoder_E407_GTSync.c **** 
+ 280:HANcoder_E407_GTSync.c ****       /* DataStoreWrite: '<S50>/Data Store Write' */
+ 281:HANcoder_E407_GTSync.c ****       rtDWork.tx_temp_count = tx_temp_counter;
+ 282:HANcoder_E407_GTSync.c **** 
+ 283:HANcoder_E407_GTSync.c ****       /* End of Outputs for SubSystem: '<S48>/If Action Subsystem' */
+ 284:HANcoder_E407_GTSync.c ****     }
+ 285:HANcoder_E407_GTSync.c **** 
+ 286:HANcoder_E407_GTSync.c ****     /* End of If: '<S48>/If' */
+ 287:HANcoder_E407_GTSync.c **** 
+ 288:HANcoder_E407_GTSync.c ****     /* Logic: '<S37>/AND' incorporates:
+ 289:HANcoder_E407_GTSync.c ****      *  Constant: '<S44>/Constant'
+ 290:HANcoder_E407_GTSync.c ****      *  Constant: '<S45>/Constant'
+ 291:HANcoder_E407_GTSync.c ****      *  DataStoreRead: '<S37>/Data Store Read4'
+ 292:HANcoder_E407_GTSync.c ****      *  RelationalOperator: '<S44>/Compare'
+ 293:HANcoder_E407_GTSync.c ****      *  RelationalOperator: '<S45>/Compare'
+ 294:HANcoder_E407_GTSync.c ****      */
+ 295:HANcoder_E407_GTSync.c ****     rtb_AND_j = ((rtb_DataStoreRead == 0U) && (rtDWork.Board_ID == 1.0));
+ 296:HANcoder_E407_GTSync.c ****   }
+ 297:HANcoder_E407_GTSync.c **** }
+ 298:HANcoder_E407_GTSync.c **** 
+ 299:HANcoder_E407_GTSync.c **** void TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4(void)
+ 300:HANcoder_E407_GTSync.c **** {
+  28              		.loc 1 300 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 301:HANcoder_E407_GTSync.c **** }
+  33              		.loc 1 301 0
+  34 0000 7047     		bx	lr
+  35              		.cfi_endproc
+  36              	.LFE114:
+  38              		.global	__aeabi_dcmpeq
+  39 0002 00BF     		.section	.text.TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12,"ax",%progbits
+  40              		.align	1
+  41              		.p2align 2,,3
+  42              		.global	TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12
+  43              		.syntax unified
+  44              		.thumb
+  45              		.thumb_func
+  46              		.fpu fpv4-sp-d16
+  48              	TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12:
+  49              	.LFB113:
+  97:HANcoder_E407_GTSync.c ****   /* Output and update for function-call system: '<S6>/Timer ISR handler' */
+  50              		.loc 1 97 0
+  51              		.cfi_startproc
+  52              		@ args = 0, pretend = 0, frame = 0
+  53              		@ frame_needed = 0, uses_anonymous_args = 0
+  54 0000 2DE9F84F 		push	{r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+  55              		.cfi_def_cfa_offset 40
+  56              		.cfi_offset 3, -40
+  57              		.cfi_offset 4, -36
+  58              		.cfi_offset 5, -32
+  59              		.cfi_offset 6, -28
+  60              		.cfi_offset 7, -24
+  61              		.cfi_offset 8, -20
+  62              		.cfi_offset 9, -16
+  63              		.cfi_offset 10, -12
+  64              		.cfi_offset 11, -8
+  65              		.cfi_offset 14, -4
+  66              	.LBB11:
+ 112:HANcoder_E407_GTSync.c ****       local_ticks_interrupt = rtDWork.local_ticks_mem_IRQ + 1U;
+  67              		.loc 1 112 0
+  68 0004 6C4B     		ldr	r3, .L62
+ 104:HANcoder_E407_GTSync.c **** 
+  69              		.loc 1 104 0
+  70 0006 6D4C     		ldr	r4, .L62+4
+ 112:HANcoder_E407_GTSync.c ****       local_ticks_interrupt = rtDWork.local_ticks_mem_IRQ + 1U;
+  71              		.loc 1 112 0
+  72 0008 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 104:HANcoder_E407_GTSync.c **** 
+  73              		.loc 1 104 0
+  74 000a 276A     		ldr	r7, [r4, #32]
+  75              	.LVL0:
+ 113:HANcoder_E407_GTSync.c ****     } else {
+  76              		.loc 1 113 0
+  77 000c DFF8C4B1 		ldr	fp, .L62+28
+ 112:HANcoder_E407_GTSync.c ****       local_ticks_interrupt = rtDWork.local_ticks_mem_IRQ + 1U;
+  78              		.loc 1 112 0
+  79 0010 002B     		cmp	r3, #0
+  80 0012 70D0     		beq	.L4
+ 113:HANcoder_E407_GTSync.c ****     } else {
+  81              		.loc 1 113 0
+  82 0014 7E1C     		adds	r6, r7, #1
+  83 0016 CBF80060 		str	r6, [fp]
+  84              	.L5:
+ 126:HANcoder_E407_GTSync.c ****       /* Entry: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handl
+  85              		.loc 1 126 0
+  86 001a 94F83050 		ldrb	r5, [r4, #48]	@ zero_extendqisi2
+ 121:HANcoder_E407_GTSync.c **** 
+  87              		.loc 1 121 0
+  88 001e 2662     		str	r6, [r4, #32]
+ 126:HANcoder_E407_GTSync.c ****       /* Entry: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handl
+  89              		.loc 1 126 0
+  90 0020 AB06     		lsls	r3, r5, #26
+  91 0022 D4F82CA0 		ldr	r10, [r4, #44]
+  92 0026 5DD4     		bmi	.L6
+ 132:HANcoder_E407_GTSync.c **** 
+  93              		.loc 1 132 0
+  94 0028 45F02005 		orr	r5, r5, #32
+  95 002c 0123     		movs	r3, #1
+  96 002e 63F38305 		bfi	r5, r3, #2, #2
+  97 0032 84F83050 		strb	r5, [r4, #48]
+ 135:HANcoder_E407_GTSync.c ****         rtDWork.active_flag_a = 1.0;
+  98              		.loc 1 135 0
+  99 0036 F507     		lsls	r5, r6, #31
+ 100 0038 66D5     		bpl	.L55
+ 101              	.L7:
+ 102 003a 614A     		ldr	r2, .L62+8
+ 103 003c 1678     		ldrb	r6, [r2]	@ zero_extendqisi2
+ 158:HANcoder_E407_GTSync.c ****       even = !even;
+ 104              		.loc 1 158 0
+ 105 003e BAF1000F 		cmp	r10, #0
+ 106 0042 06D0     		beq	.L11
+ 159:HANcoder_E407_GTSync.c ****       rtDWork.rise_edge_at_evenEventCounter--;
+ 107              		.loc 1 159 0
+ 108 0044 B6FA86F6 		clz	r6, r6
+ 109 0048 7609     		lsrs	r6, r6, #5
+ 160:HANcoder_E407_GTSync.c ****     }
+ 110              		.loc 1 160 0
+ 111 004a 0AF1FF33 		add	r3, r10, #-1
+ 159:HANcoder_E407_GTSync.c ****       rtDWork.rise_edge_at_evenEventCounter--;
+ 112              		.loc 1 159 0
+ 113 004e 1670     		strb	r6, [r2]
+ 160:HANcoder_E407_GTSync.c ****     }
+ 114              		.loc 1 160 0
+ 115 0050 E362     		str	r3, [r4, #44]
+ 116              	.L11:
+ 117              	.LVL1:
+ 118              	.LBB12:
+ 119              	.LBB13:
+ 302:HANcoder_E407_GTSync.c **** 
+ 303:HANcoder_E407_GTSync.c **** /*
+ 304:HANcoder_E407_GTSync.c ****  *   This function updates active task flag for each subrate.
+ 305:HANcoder_E407_GTSync.c ****  * The function is called at model base rate, hence the
+ 306:HANcoder_E407_GTSync.c ****  * generated code self-manages all its subrates.
+ 307:HANcoder_E407_GTSync.c ****  */
+ 308:HANcoder_E407_GTSync.c **** static void rate_scheduler(void)
+ 309:HANcoder_E407_GTSync.c **** {
+ 310:HANcoder_E407_GTSync.c ****   /* Compute which subrates run during the next base time step.  Subrates
+ 311:HANcoder_E407_GTSync.c ****    * are an integer multiple of the base rate counter.  Therefore, the subtask
+ 312:HANcoder_E407_GTSync.c ****    * counter is reset when it reaches its limit (zero means run).
+ 313:HANcoder_E407_GTSync.c ****    */
+ 314:HANcoder_E407_GTSync.c ****   (rtM->Timing.TaskCounters.TID[1])++;
+ 315:HANcoder_E407_GTSync.c ****   if ((rtM->Timing.TaskCounters.TID[1]) > 9) {/* Sample time: [0.1s, 0.0s] */
+ 316:HANcoder_E407_GTSync.c ****     rtM->Timing.TaskCounters.TID[1] = 0;
+ 317:HANcoder_E407_GTSync.c ****   }
+ 318:HANcoder_E407_GTSync.c **** 
+ 319:HANcoder_E407_GTSync.c ****   (rtM->Timing.TaskCounters.TID[2])++;
+ 320:HANcoder_E407_GTSync.c ****   if ((rtM->Timing.TaskCounters.TID[2]) > 19) {/* Sample time: [0.2s, 0.0s] */
+ 321:HANcoder_E407_GTSync.c ****     rtM->Timing.TaskCounters.TID[2] = 0;
+ 322:HANcoder_E407_GTSync.c ****   }
+ 323:HANcoder_E407_GTSync.c **** }
+ 324:HANcoder_E407_GTSync.c **** 
+ 325:HANcoder_E407_GTSync.c **** /*
+ 326:HANcoder_E407_GTSync.c ****  * Output and update for trigger system:
+ 327:HANcoder_E407_GTSync.c ****  *    '<S35>/Reset Free Running Counter1'
+ 328:HANcoder_E407_GTSync.c ****  *    '<S35>/Reset Free Running Counter2'
+ 329:HANcoder_E407_GTSync.c ****  */
+ 330:HANcoder_E407_GTSync.c **** void ResetFreeRunningCounter1(boolean_T rtu_Trigger,
+ 331:HANcoder_E407_GTSync.c ****   rtZCE_ResetFreeRunningCounter1 *localZCE)
+ 332:HANcoder_E407_GTSync.c **** {
+ 333:HANcoder_E407_GTSync.c ****   /* Outputs for Triggered SubSystem: '<S35>/Reset Free Running Counter1' incorporates:
+ 334:HANcoder_E407_GTSync.c ****    *  TriggerPort: '<S40>/Trigger'
+ 335:HANcoder_E407_GTSync.c ****    */
+ 336:HANcoder_E407_GTSync.c ****   if (rtu_Trigger && (localZCE->ResetFreeRunningCounter1_Trig_Z != POS_ZCSIG)) {
+ 120              		.loc 1 336 0
+ 121 0052 DFF884A1 		ldr	r10, .L62+32
+ 122 0056 1EB1     		cbz	r6, .L12
+ 123 0058 9AF80230 		ldrb	r3, [r10, #2]	@ zero_extendqisi2
+ 124 005c 012B     		cmp	r3, #1
+ 125 005e 58D1     		bne	.L56
+ 126              	.LVL2:
+ 127              	.L12:
+ 128              	.LBE13:
+ 129              	.LBE12:
+ 173:HANcoder_E407_GTSync.c ****       /* Entry: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handl
+ 130              		.loc 1 173 0
+ 131 0060 94F83050 		ldrb	r5, [r4, #48]	@ zero_extendqisi2
+ 132              	.LBB16:
+ 133              	.LBB14:
+ 337:HANcoder_E407_GTSync.c ****     /* M-S-Function: '<S40>/Level-2 M-file S-Function' */
+ 338:HANcoder_E407_GTSync.c ****     /* reset 16-bit free running counter value */
+ 339:HANcoder_E407_GTSync.c ****     TimeoutResetFreeRunningCounter(TIMEOUT_MODULE_TIM4);
+ 340:HANcoder_E407_GTSync.c ****   }
+ 341:HANcoder_E407_GTSync.c **** 
+ 342:HANcoder_E407_GTSync.c ****   localZCE->ResetFreeRunningCounter1_Trig_Z = rtu_Trigger;
+ 134              		.loc 1 342 0
+ 135 0064 8AF80260 		strb	r6, [r10, #2]
+ 136              	.LVL3:
+ 137              	.LBE14:
+ 138              	.LBE16:
+ 173:HANcoder_E407_GTSync.c ****       /* Entry: HANcoder STM32 Target - E407-STM32 algorithm/Global Ticks Increment/Timer ISR handl
+ 139              		.loc 1 173 0
+ 140 0068 E906     		lsls	r1, r5, #27
+ 141 006a A66A     		ldr	r6, [r4, #40]
+ 142 006c 33D4     		bmi	.L13
+ 182:HANcoder_E407_GTSync.c ****         rtDWork.active_flag = 1.0;
+ 143              		.loc 1 182 0
+ 144 006e DBF80030 		ldr	r3, [fp]
+ 179:HANcoder_E407_GTSync.c **** 
+ 145              		.loc 1 179 0
+ 146 0072 0122     		movs	r2, #1
+ 147 0074 45F01005 		orr	r5, r5, #16
+ 148 0078 62F30105 		bfi	r5, r2, #0, #2
+ 182:HANcoder_E407_GTSync.c ****         rtDWork.active_flag = 1.0;
+ 149              		.loc 1 182 0
+ 150 007c DA07     		lsls	r2, r3, #31
+ 179:HANcoder_E407_GTSync.c **** 
+ 151              		.loc 1 179 0
+ 152 007e 84F83050 		strb	r5, [r4, #48]
+ 182:HANcoder_E407_GTSync.c ****         rtDWork.active_flag = 1.0;
+ 153              		.loc 1 182 0
+ 154 0082 3CD4     		bmi	.L57
+ 155              	.L14:
+ 156 0084 4F4B     		ldr	r3, .L62+12
+ 157 0086 1D78     		ldrb	r5, [r3]	@ zero_extendqisi2
+ 205:HANcoder_E407_GTSync.c ****       odd = !odd;
+ 158              		.loc 1 205 0
+ 159 0088 2EB1     		cbz	r6, .L18
+ 206:HANcoder_E407_GTSync.c ****       rtDWork.rise_edge_at_oddEventCounter--;
+ 160              		.loc 1 206 0
+ 161 008a B5FA85F5 		clz	r5, r5
+ 162 008e 6D09     		lsrs	r5, r5, #5
+ 207:HANcoder_E407_GTSync.c ****     }
+ 163              		.loc 1 207 0
+ 164 0090 013E     		subs	r6, r6, #1
+ 206:HANcoder_E407_GTSync.c ****       rtDWork.rise_edge_at_oddEventCounter--;
+ 165              		.loc 1 206 0
+ 166 0092 1D70     		strb	r5, [r3]
+ 207:HANcoder_E407_GTSync.c ****     }
+ 167              		.loc 1 207 0
+ 168 0094 A662     		str	r6, [r4, #40]
+ 169              	.L18:
+ 170              	.LVL4:
+ 171              	.LBB17:
+ 172              	.LBB18:
+ 336:HANcoder_E407_GTSync.c ****     /* M-S-Function: '<S40>/Level-2 M-file S-Function' */
+ 173              		.loc 1 336 0
+ 174 0096 1DB1     		cbz	r5, .L19
+ 175 0098 9AF80130 		ldrb	r3, [r10, #1]	@ zero_extendqisi2
+ 176 009c 012B     		cmp	r3, #1
+ 177 009e 3CD1     		bne	.L58
+ 178              	.L19:
+ 179              	.LBE18:
+ 180              	.LBE17:
+ 218:HANcoder_E407_GTSync.c ****       /* Outputs for IfAction SubSystem: '<S36>/Reset values' incorporates:
+ 181              		.loc 1 218 0
+ 182 00a0 4CF25033 		movw	r3, #50000
+ 183 00a4 9F42     		cmp	r7, r3
+ 184              	.LBB22:
+ 185              	.LBB19:
+ 186              		.loc 1 342 0
+ 187 00a6 8AF80150 		strb	r5, [r10, #1]
+ 188              	.LVL5:
+ 189              	.LBE19:
+ 190              	.LBE22:
+ 218:HANcoder_E407_GTSync.c ****       /* Outputs for IfAction SubSystem: '<S36>/Reset values' incorporates:
+ 191              		.loc 1 218 0
+ 192 00aa 3FD0     		beq	.L59
+ 193              	.L20:
+ 269:HANcoder_E407_GTSync.c ****         (rtDWork.Board_ID == 0.0)) {
+ 194              		.loc 1 269 0
+ 195 00ac 46F2A813 		movw	r3, #25000
+ 196 00b0 9F42     		cmp	r7, r3
+ 197 00b2 0ED1     		bne	.L3
+ 269:HANcoder_E407_GTSync.c ****         (rtDWork.Board_ID == 0.0)) {
+ 198              		.loc 1 269 0 is_stmt 0 discriminator 1
+ 199 00b4 94F83630 		ldrb	r3, [r4, #54]	@ zero_extendqisi2
+ 200 00b8 5BB9     		cbnz	r3, .L3
+ 269:HANcoder_E407_GTSync.c ****         (rtDWork.Board_ID == 0.0)) {
+ 201              		.loc 1 269 0 discriminator 2
+ 202 00ba 0022     		movs	r2, #0
+ 203 00bc 0023     		movs	r3, #0
+ 204 00be D4E90201 		ldrd	r0, [r4, #8]
+ 205 00c2 FFF7FEFF 		bl	__aeabi_dcmpeq
+ 206              	.LVL6:
+ 207 00c6 20B1     		cbz	r0, .L3
+ 278:HANcoder_E407_GTSync.c **** 
+ 208              		.loc 1 278 0 is_stmt 1
+ 209 00c8 636A     		ldr	r3, [r4, #36]
+ 210 00ca 3F4A     		ldr	r2, .L62+16
+ 211 00cc 0133     		adds	r3, r3, #1
+ 281:HANcoder_E407_GTSync.c **** 
+ 212              		.loc 1 281 0
+ 213 00ce 6362     		str	r3, [r4, #36]
+ 214              	.LVL7:
+ 278:HANcoder_E407_GTSync.c **** 
+ 215              		.loc 1 278 0
+ 216 00d0 1360     		str	r3, [r2]
+ 217              	.LVL8:
+ 218              	.L3:
+ 219              	.LBE11:
+ 297:HANcoder_E407_GTSync.c **** 
+ 220              		.loc 1 297 0
+ 221 00d2 BDE8F88F 		pop	{r3, r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 222              	.LVL9:
+ 223              	.L13:
+ 224              	.LBB26:
+ 185:HANcoder_E407_GTSync.c ****       /* During 'Odd_tick': '<S39>:1' */
+ 225              		.loc 1 185 0
+ 226 00d6 05F00303 		and	r3, r5, #3
+ 227 00da 012B     		cmp	r3, #1
+ 228 00dc 36D0     		beq	.L60
+ 202:HANcoder_E407_GTSync.c ****     }
+ 229              		.loc 1 202 0
+ 230 00de 0136     		adds	r6, r6, #1
+ 231 00e0 A662     		str	r6, [r4, #40]
+ 232 00e2 CFE7     		b	.L14
+ 233              	.L6:
+ 138:HANcoder_E407_GTSync.c ****       /* During 'Even_tick': '<S38>:1' */
+ 234              		.loc 1 138 0
+ 235 00e4 05F00C03 		and	r3, r5, #12
+ 236 00e8 042B     		cmp	r3, #4
+ 237 00ea 42D0     		beq	.L61
+ 155:HANcoder_E407_GTSync.c ****     }
+ 238              		.loc 1 155 0
+ 239 00ec 0AF1010A 		add	r10, r10, #1
+ 240 00f0 C4F82CA0 		str	r10, [r4, #44]
+ 241 00f4 A1E7     		b	.L7
+ 242              	.L4:
+ 104:HANcoder_E407_GTSync.c **** 
+ 243              		.loc 1 104 0
+ 244 00f6 3E46     		mov	r6, r7
+ 115:HANcoder_E407_GTSync.c ****     }
+ 245              		.loc 1 115 0
+ 246 00f8 CBF80070 		str	r7, [fp]
+ 247 00fc 8DE7     		b	.L5
+ 248              	.L57:
+ 183:HANcoder_E407_GTSync.c ****       }
+ 249              		.loc 1 183 0
+ 250 00fe 334B     		ldr	r3, .L62+20
+ 251 0100 0022     		movs	r2, #0
+ 252 0102 C4E90423 		strd	r2, [r4, #16]
+ 253 0106 BDE7     		b	.L14
+ 254              	.L55:
+ 136:HANcoder_E407_GTSync.c ****       }
+ 255              		.loc 1 136 0
+ 256 0108 304B     		ldr	r3, .L62+20
+ 257 010a 0022     		movs	r2, #0
+ 258 010c C4E90623 		strd	r2, [r4, #24]
+ 259 0110 93E7     		b	.L7
+ 260              	.LVL10:
+ 261              	.L56:
+ 262              	.LBB23:
+ 263              	.LBB15:
+ 339:HANcoder_E407_GTSync.c ****   }
+ 264              		.loc 1 339 0
+ 265 0112 0320     		movs	r0, #3
+ 266 0114 FFF7FEFF 		bl	TimeoutResetFreeRunningCounter
+ 267              	.LVL11:
+ 268 0118 A2E7     		b	.L12
+ 269              	.LVL12:
+ 270              	.L58:
+ 271              	.LBE15:
+ 272              	.LBE23:
+ 273              	.LBB24:
+ 274              	.LBB20:
+ 275 011a 0320     		movs	r0, #3
+ 276 011c FFF7FEFF 		bl	TimeoutResetFreeRunningCounter
+ 277              	.LVL13:
+ 278              	.LBE20:
+ 279              	.LBE24:
+ 218:HANcoder_E407_GTSync.c ****       /* Outputs for IfAction SubSystem: '<S36>/Reset values' incorporates:
+ 280              		.loc 1 218 0
+ 281 0120 4CF25033 		movw	r3, #50000
+ 282 0124 9F42     		cmp	r7, r3
+ 283              	.LBB25:
+ 284              	.LBB21:
+ 285              		.loc 1 342 0
+ 286 0126 8AF80150 		strb	r5, [r10, #1]
+ 287              	.LVL14:
+ 288              	.LBE21:
+ 289              	.LBE25:
+ 218:HANcoder_E407_GTSync.c ****       /* Outputs for IfAction SubSystem: '<S36>/Reset values' incorporates:
+ 290              		.loc 1 218 0
+ 291 012a BFD1     		bne	.L20
+ 292              	.L59:
+ 223:HANcoder_E407_GTSync.c **** 
+ 293              		.loc 1 223 0
+ 294 012c 94F83620 		ldrb	r2, [r4, #54]	@ zero_extendqisi2
+ 295 0130 2748     		ldr	r0, .L62+24
+ 229:HANcoder_E407_GTSync.c **** 
+ 296              		.loc 1 229 0
+ 297 0132 531C     		adds	r3, r2, #1
+ 298 0134 DBB2     		uxtb	r3, r3
+ 234:HANcoder_E407_GTSync.c **** 
+ 299              		.loc 1 234 0
+ 300 0136 0021     		movs	r1, #0
+ 239:HANcoder_E407_GTSync.c ****         /* Outputs for IfAction SubSystem: '<S42>/If Action Subsystem' incorporates:
+ 301              		.loc 1 239 0
+ 302 0138 022B     		cmp	r3, #2
+ 223:HANcoder_E407_GTSync.c **** 
+ 303              		.loc 1 223 0
+ 304 013a 0270     		strb	r2, [r0]
+ 229:HANcoder_E407_GTSync.c **** 
+ 305              		.loc 1 229 0
+ 306 013c 84F83630 		strb	r3, [r4, #54]
+ 234:HANcoder_E407_GTSync.c **** 
+ 307              		.loc 1 234 0
+ 308 0140 2162     		str	r1, [r4, #32]
+ 239:HANcoder_E407_GTSync.c ****         /* Outputs for IfAction SubSystem: '<S42>/If Action Subsystem' incorporates:
+ 309              		.loc 1 239 0
+ 310 0142 C6D1     		bne	.L3
+ 246:HANcoder_E407_GTSync.c **** 
+ 311              		.loc 1 246 0
+ 312 0144 84F83610 		strb	r1, [r4, #54]
+ 313              	.LBE26:
+ 297:HANcoder_E407_GTSync.c **** 
+ 314              		.loc 1 297 0
+ 315 0148 BDE8F88F 		pop	{r3, r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 316              	.LVL15:
+ 317              	.L60:
+ 318              	.LBB27:
+ 187:HANcoder_E407_GTSync.c ****         /* Transition: '<S39>:5' */
+ 319              		.loc 1 187 0
+ 320 014c DFF87C90 		ldr	r9, .L62+20
+ 321 0150 4FF00008 		mov	r8, #0
+ 322 0154 D4E90401 		ldrd	r0, [r4, #16]
+ 323 0158 4246     		mov	r2, r8
+ 324 015a 4B46     		mov	r3, r9
+ 325 015c FFF7FEFF 		bl	__aeabi_dcmpeq
+ 326              	.LVL16:
+ 327 0160 E0B1     		cbz	r0, .L53
+ 189:HANcoder_E407_GTSync.c **** 
+ 328              		.loc 1 189 0
+ 329 0162 0223     		movs	r3, #2
+ 193:HANcoder_E407_GTSync.c ****       } else {
+ 330              		.loc 1 193 0
+ 331 0164 0136     		adds	r6, r6, #1
+ 189:HANcoder_E407_GTSync.c **** 
+ 332              		.loc 1 189 0
+ 333 0166 63F30105 		bfi	r5, r3, #0, #2
+ 193:HANcoder_E407_GTSync.c ****       } else {
+ 334              		.loc 1 193 0
+ 335 016a A662     		str	r6, [r4, #40]
+ 189:HANcoder_E407_GTSync.c **** 
+ 336              		.loc 1 189 0
+ 337 016c 84F83050 		strb	r5, [r4, #48]
+ 338 0170 88E7     		b	.L14
+ 339              	.L61:
+ 140:HANcoder_E407_GTSync.c ****         /* Transition: '<S38>:5' */
+ 340              		.loc 1 140 0
+ 341 0172 DFF85890 		ldr	r9, .L62+20
+ 342 0176 4FF00008 		mov	r8, #0
+ 343 017a D4E90601 		ldrd	r0, [r4, #24]
+ 344 017e 4246     		mov	r2, r8
+ 345 0180 4B46     		mov	r3, r9
+ 346 0182 FFF7FEFF 		bl	__aeabi_dcmpeq
+ 347              	.LVL17:
+ 348 0186 88B1     		cbz	r0, .L51
+ 142:HANcoder_E407_GTSync.c **** 
+ 349              		.loc 1 142 0
+ 350 0188 0223     		movs	r3, #2
+ 146:HANcoder_E407_GTSync.c ****       } else {
+ 351              		.loc 1 146 0
+ 352 018a 0AF1010A 		add	r10, r10, #1
+ 142:HANcoder_E407_GTSync.c **** 
+ 353              		.loc 1 142 0
+ 354 018e 63F38305 		bfi	r5, r3, #2, #2
+ 146:HANcoder_E407_GTSync.c ****       } else {
+ 355              		.loc 1 146 0
+ 356 0192 C4F82CA0 		str	r10, [r4, #44]
+ 142:HANcoder_E407_GTSync.c **** 
+ 357              		.loc 1 142 0
+ 358 0196 84F83050 		strb	r5, [r4, #48]
+ 359 019a 4EE7     		b	.L7
+ 360              	.L53:
+ 195:HANcoder_E407_GTSync.c ****           rtDWork.active_flag = 1.0;
+ 361              		.loc 1 195 0
+ 362 019c DBF80030 		ldr	r3, [fp]
+ 363 01a0 DB07     		lsls	r3, r3, #31
+ 364 01a2 7FF56FAF 		bpl	.L14
+ 196:HANcoder_E407_GTSync.c ****         }
+ 365              		.loc 1 196 0
+ 366 01a6 C4E90489 		strd	r8, [r4, #16]
+ 367 01aa 6BE7     		b	.L14
+ 368              	.L51:
+ 148:HANcoder_E407_GTSync.c ****           rtDWork.active_flag_a = 1.0;
+ 369              		.loc 1 148 0
+ 370 01ac F007     		lsls	r0, r6, #31
+ 371 01ae 3FF544AF 		bmi	.L7
+ 149:HANcoder_E407_GTSync.c ****         }
+ 372              		.loc 1 149 0
+ 373 01b2 C4E90689 		strd	r8, [r4, #24]
+ 374 01b6 40E7     		b	.L7
+ 375              	.L63:
+ 376              		.align	2
+ 377              	.L62:
+ 378 01b8 00000000 		.word	rtB
+ 379 01bc 00000000 		.word	rtDWork
+ 380 01c0 00000000 		.word	even
+ 381 01c4 00000000 		.word	odd
+ 382 01c8 00000000 		.word	tx_temp_counter
+ 383 01cc 0000F03F 		.word	1072693248
+ 384 01d0 00000000 		.word	bc
+ 385 01d4 00000000 		.word	local_ticks_interrupt
+ 386 01d8 00000000 		.word	rtPrevZCSigState
+ 387              	.LBE27:
+ 388              		.cfi_endproc
+ 389              	.LFE113:
+ 391              		.section	.text.ByteSwap_x,"ax",%progbits
+ 392              		.align	1
+ 393              		.p2align 2,,3
+ 394              		.global	ByteSwap_x
+ 395              		.syntax unified
+ 396              		.thumb
+ 397              		.thumb_func
+ 398              		.fpu fpv4-sp-d16
+ 400              	ByteSwap_x:
+ 401              	.LFB112:
+  87:HANcoder_E407_GTSync.c ****   int i = 0;
+ 402              		.loc 1 87 0
+ 403              		.cfi_startproc
+ 404              		@ args = 0, pretend = 0, frame = 0
+ 405              		@ frame_needed = 0, uses_anonymous_args = 0
+ 406              		@ link register save eliminated.
+ 407              	.LVL18:
+  89:HANcoder_E407_GTSync.c ****   while (i<j) {
+ 408              		.loc 1 89 0
+ 409 0000 4B1E     		subs	r3, r1, #1
+ 410              	.LVL19:
+  90:HANcoder_E407_GTSync.c ****     swap(&b[i], &b[j]);
+ 411              		.loc 1 90 0
+ 412 0002 002B     		cmp	r3, #0
+ 413 0004 10DD     		ble	.L69
+  87:HANcoder_E407_GTSync.c ****   int i = 0;
+ 414              		.loc 1 87 0
+ 415 0006 70B4     		push	{r4, r5, r6}
+ 416              		.cfi_def_cfa_offset 12
+ 417              		.cfi_offset 4, -12
+ 418              		.cfi_offset 5, -8
+ 419              		.cfi_offset 6, -4
+  88:HANcoder_E407_GTSync.c ****   int j = n-1;
+ 420              		.loc 1 88 0
+ 421 0008 0023     		movs	r3, #0
+ 422              	.LVL20:
+ 423 000a 441E     		subs	r4, r0, #1
+ 424 000c 0844     		add	r0, r0, r1
+ 425              	.LVL21:
+ 426              	.L66:
+  92:HANcoder_E407_GTSync.c ****   }
+ 427              		.loc 1 92 0
+ 428 000e 0133     		adds	r3, r3, #1
+ 429              	.LVL22:
+  90:HANcoder_E407_GTSync.c ****     swap(&b[i], &b[j]);
+ 430              		.loc 1 90 0
+ 431 0010 DA43     		mvns	r2, r3
+ 432 0012 0A44     		add	r2, r2, r1
+ 433              	.LBB28:
+ 434              	.LBB29:
+  76:HANcoder_E407_GTSync.c ****   *a = *b;
+ 435              		.loc 1 76 0
+ 436 0014 14F8015F 		ldrb	r5, [r4, #1]!	@ zero_extendqisi2
+ 437              	.LVL23:
+  77:HANcoder_E407_GTSync.c ****   *b = i;
+ 438              		.loc 1 77 0
+ 439 0018 10F8016D 		ldrb	r6, [r0, #-1]!	@ zero_extendqisi2
+ 440              	.LVL24:
+ 441 001c 2670     		strb	r6, [r4]
+ 442              	.LBE29:
+ 443              	.LBE28:
+  90:HANcoder_E407_GTSync.c ****     swap(&b[i], &b[j]);
+ 444              		.loc 1 90 0
+ 445 001e 9342     		cmp	r3, r2
+ 446              	.LBB31:
+ 447              	.LBB30:
+  78:HANcoder_E407_GTSync.c **** }                                      /*** end of swap ***/
+ 448              		.loc 1 78 0
+ 449 0020 0570     		strb	r5, [r0]
+ 450              	.LVL25:
+ 451              	.LBE30:
+ 452              	.LBE31:
+  90:HANcoder_E407_GTSync.c ****     swap(&b[i], &b[j]);
+ 453              		.loc 1 90 0
+ 454 0022 F4DB     		blt	.L66
+  94:HANcoder_E407_GTSync.c **** 
+ 455              		.loc 1 94 0
+ 456 0024 70BC     		pop	{r4, r5, r6}
+ 457              		.cfi_restore 6
+ 458              		.cfi_restore 5
+ 459              		.cfi_restore 4
+ 460              		.cfi_def_cfa_offset 0
+ 461 0026 7047     		bx	lr
+ 462              	.LVL26:
+ 463              	.L69:
+ 464 0028 7047     		bx	lr
+ 465              		.cfi_endproc
+ 466              	.LFE112:
+ 468 002a 00BF     		.section	.text.ResetFreeRunningCounter1,"ax",%progbits
+ 469              		.align	1
+ 470              		.p2align 2,,3
+ 471              		.global	ResetFreeRunningCounter1
+ 472              		.syntax unified
+ 473              		.thumb
+ 474              		.thumb_func
+ 475              		.fpu fpv4-sp-d16
+ 477              	ResetFreeRunningCounter1:
+ 478              	.LFB116:
+ 332:HANcoder_E407_GTSync.c ****   /* Outputs for Triggered SubSystem: '<S35>/Reset Free Running Counter1' incorporates:
+ 479              		.loc 1 332 0
+ 480              		.cfi_startproc
+ 481              		@ args = 0, pretend = 0, frame = 0
+ 482              		@ frame_needed = 0, uses_anonymous_args = 0
+ 483              	.LVL27:
+ 484 0000 38B5     		push	{r3, r4, r5, lr}
+ 485              		.cfi_def_cfa_offset 16
+ 486              		.cfi_offset 3, -16
+ 487              		.cfi_offset 4, -12
+ 488              		.cfi_offset 5, -8
+ 489              		.cfi_offset 14, -4
+ 332:HANcoder_E407_GTSync.c ****   /* Outputs for Triggered SubSystem: '<S35>/Reset Free Running Counter1' incorporates:
+ 490              		.loc 1 332 0
+ 491 0002 0D46     		mov	r5, r1
+ 336:HANcoder_E407_GTSync.c ****     /* M-S-Function: '<S40>/Level-2 M-file S-Function' */
+ 492              		.loc 1 336 0
+ 493 0004 0446     		mov	r4, r0
+ 494 0006 28B1     		cbz	r0, .L73
+ 336:HANcoder_E407_GTSync.c ****     /* M-S-Function: '<S40>/Level-2 M-file S-Function' */
+ 495              		.loc 1 336 0 is_stmt 0 discriminator 1
+ 496 0008 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 497 000a 012B     		cmp	r3, #1
+ 498 000c 02D0     		beq	.L73
+ 339:HANcoder_E407_GTSync.c ****   }
+ 499              		.loc 1 339 0 is_stmt 1
+ 500 000e 0320     		movs	r0, #3
+ 501              	.LVL28:
+ 502 0010 FFF7FEFF 		bl	TimeoutResetFreeRunningCounter
+ 503              	.LVL29:
+ 504              	.L73:
+ 505              		.loc 1 342 0
+ 506 0014 2C70     		strb	r4, [r5]
+ 343:HANcoder_E407_GTSync.c **** 
+ 344:HANcoder_E407_GTSync.c ****   /* End of Outputs for SubSystem: '<S35>/Reset Free Running Counter1' */
+ 345:HANcoder_E407_GTSync.c **** }
+ 507              		.loc 1 345 0
+ 508 0016 38BD     		pop	{r3, r4, r5, pc}
+ 509              		.cfi_endproc
+ 510              	.LFE116:
+ 512              		.global	__aeabi_ui2d
+ 513              		.global	__aeabi_dadd
+ 514              		.global	__aeabi_dcmpgt
+ 515              		.global	__aeabi_f2d
+ 516              		.section	.text.HANcoder_E407_GTSync_step,"ax",%progbits
+ 517              		.align	1
+ 518              		.p2align 2,,3
+ 519              		.global	HANcoder_E407_GTSync_step
+ 520              		.syntax unified
+ 521              		.thumb
+ 522              		.thumb_func
+ 523              		.fpu fpv4-sp-d16
+ 525              	HANcoder_E407_GTSync_step:
+ 526              	.LFB117:
+ 346:HANcoder_E407_GTSync.c **** 
+ 347:HANcoder_E407_GTSync.c **** /* Model step function */
+ 348:HANcoder_E407_GTSync.c **** void HANcoder_E407_GTSync_step(void)
+ 349:HANcoder_E407_GTSync.c **** {
+ 527              		.loc 1 349 0
+ 528              		.cfi_startproc
+ 529              		@ args = 0, pretend = 0, frame = 0
+ 530              		@ frame_needed = 0, uses_anonymous_args = 0
+ 531 0000 2DE9F84F 		push	{r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 532              		.cfi_def_cfa_offset 40
+ 533              		.cfi_offset 3, -40
+ 534              		.cfi_offset 4, -36
+ 535              		.cfi_offset 5, -32
+ 536              		.cfi_offset 6, -28
+ 537              		.cfi_offset 7, -24
+ 538              		.cfi_offset 8, -20
+ 539              		.cfi_offset 9, -16
+ 540              		.cfi_offset 10, -12
+ 541              		.cfi_offset 11, -8
+ 542              		.cfi_offset 14, -4
+ 350:HANcoder_E407_GTSync.c ****   /* local block i/o variables */
+ 351:HANcoder_E407_GTSync.c ****   boolean_T rtb_Level2MfileSFunction;
+ 352:HANcoder_E407_GTSync.c ****   int32_T rowIdx;
+ 353:HANcoder_E407_GTSync.c ****   boolean_T rtb_GreaterThan;
+ 354:HANcoder_E407_GTSync.c ****   uint8_T rtb_Output;
+ 355:HANcoder_E407_GTSync.c ****   uint8_T rtb_FixPtSum1;
+ 356:HANcoder_E407_GTSync.c ****   uint8_T rtb_FixPtSum1_b;
+ 357:HANcoder_E407_GTSync.c ****   boolean_T rtb_SampleTimeCrowBar;
+ 358:HANcoder_E407_GTSync.c **** 
+ 359:HANcoder_E407_GTSync.c ****   /* RelationalOperator: '<S9>/GreaterThan' incorporates:
+ 360:HANcoder_E407_GTSync.c ****    *  Constant: '<S9>/Constant'
+ 361:HANcoder_E407_GTSync.c ****    *  DataStoreRead: '<S9>/Data Store Read'
+ 362:HANcoder_E407_GTSync.c ****    *  DataStoreRead: '<S9>/Data Store Read1'
+ 363:HANcoder_E407_GTSync.c ****    *  DataTypeConversion: '<S9>/Cast To Double'
+ 364:HANcoder_E407_GTSync.c ****    *  Sum: '<S9>/Sum'
+ 365:HANcoder_E407_GTSync.c ****    */
+ 366:HANcoder_E407_GTSync.c ****   rtb_GreaterThan = (rtDWork.local_ticks_mem_IRQ > rtDWork.LED_local_ticks +
+ 543              		.loc 1 366 0
+ 544 0004 824C     		ldr	r4, .L125+8
+ 545 0006 206A     		ldr	r0, [r4, #32]
+ 546 0008 FFF7FEFF 		bl	__aeabi_ui2d
+ 547              	.LVL30:
+ 548 000c D4E90089 		ldrd	r8, [r4]
+ 549 0010 7DA3     		adr	r3, .L125
+ 550 0012 D3E90023 		ldrd	r2, [r3]
+ 551 0016 0646     		mov	r6, r0
+ 552 0018 0F46     		mov	r7, r1
+ 553              	.LVL31:
+ 554 001a 4046     		mov	r0, r8
+ 555 001c 4946     		mov	r1, r9
+ 556 001e FFF7FEFF 		bl	__aeabi_dadd
+ 557              	.LVL32:
+ 367:HANcoder_E407_GTSync.c ****                      10000.0);
+ 368:HANcoder_E407_GTSync.c **** 
+ 369:HANcoder_E407_GTSync.c ****   /* Switch: '<S9>/Switch' incorporates:
+ 370:HANcoder_E407_GTSync.c ****    *  DataStoreRead: '<S9>/Data Store Read'
+ 371:HANcoder_E407_GTSync.c ****    *  DataStoreRead: '<S9>/Data Store Read2'
+ 372:HANcoder_E407_GTSync.c ****    *  DataStoreRead: '<S9>/Data Store Read3'
+ 373:HANcoder_E407_GTSync.c ****    *  DataStoreWrite: '<S9>/Data Store Write1'
+ 374:HANcoder_E407_GTSync.c ****    *  DataTypeConversion: '<S9>/Cast To Double'
+ 375:HANcoder_E407_GTSync.c ****    *  Logic: '<S9>/NOT'
+ 376:HANcoder_E407_GTSync.c ****    *  Switch: '<S9>/Switch1'
+ 377:HANcoder_E407_GTSync.c ****    */
+ 378:HANcoder_E407_GTSync.c ****   if (rtb_GreaterThan) {
+ 558              		.loc 1 378 0
+ 559 0022 0246     		mov	r2, r0
+ 560 0024 0B46     		mov	r3, r1
+ 561 0026 3046     		mov	r0, r6
+ 562 0028 3946     		mov	r1, r7
+ 563 002a 94F837A0 		ldrb	r10, [r4, #55]	@ zero_extendqisi2
+ 564 002e FFF7FEFF 		bl	__aeabi_dcmpgt
+ 565              	.LVL33:
+ 566 0032 0028     		cmp	r0, #0
+ 567 0034 00F0A280 		beq	.L116
+ 379:HANcoder_E407_GTSync.c ****     LED_local_ticks_signal = rtDWork.local_ticks_mem_IRQ;
+ 568              		.loc 1 379 0
+ 569 0038 764B     		ldr	r3, .L125+12
+ 380:HANcoder_E407_GTSync.c ****     rtDWork.LED_State = !rtDWork.LED_State;
+ 570              		.loc 1 380 0
+ 571 003a BAFA8AFA 		clz	r10, r10
+ 379:HANcoder_E407_GTSync.c ****     LED_local_ticks_signal = rtDWork.local_ticks_mem_IRQ;
+ 572              		.loc 1 379 0
+ 573 003e C3E90067 		strd	r6, [r3]
+ 574              		.loc 1 380 0
+ 575 0042 4FEA5A1A 		lsr	r10, r10, #5
+ 576 0046 84F837A0 		strb	r10, [r4, #55]
+ 577              	.LVL34:
+ 578              	.L84:
+ 579 004a DFF8FC81 		ldr	r8, .L125+64
+ 381:HANcoder_E407_GTSync.c ****   } else {
+ 382:HANcoder_E407_GTSync.c ****     LED_local_ticks_signal = rtDWork.LED_local_ticks;
+ 383:HANcoder_E407_GTSync.c ****   }
+ 384:HANcoder_E407_GTSync.c **** 
+ 385:HANcoder_E407_GTSync.c ****   /* End of Switch: '<S9>/Switch' */
+ 386:HANcoder_E407_GTSync.c **** 
+ 387:HANcoder_E407_GTSync.c ****   /* DataStoreWrite: '<S9>/Data Store Write' */
+ 388:HANcoder_E407_GTSync.c ****   rtDWork.LED_local_ticks = LED_local_ticks_signal;
+ 389:HANcoder_E407_GTSync.c **** 
+ 390:HANcoder_E407_GTSync.c ****   /* DataStoreRead: '<S9>/Data Store Read5' */
+ 391:HANcoder_E407_GTSync.c ****   rtB.DataStoreRead5 = rtDWork.LED_State;
+ 580              		.loc 1 391 0
+ 581 004e DFF8FC91 		ldr	r9, .L125+68
+ 392:HANcoder_E407_GTSync.c ****   if (rtM->Timing.TaskCounters.TID[1] == 0) {
+ 582              		.loc 1 392 0
+ 583 0052 98F80920 		ldrb	r2, [r8, #9]	@ zero_extendqisi2
+ 391:HANcoder_E407_GTSync.c ****   if (rtM->Timing.TaskCounters.TID[1] == 0) {
+ 584              		.loc 1 391 0
+ 585 0056 89F801A0 		strb	r10, [r9, #1]
+ 388:HANcoder_E407_GTSync.c **** 
+ 586              		.loc 1 388 0
+ 587 005a C4E90067 		strd	r6, [r4]
+ 588 005e 98F80A30 		ldrb	r3, [r8, #10]	@ zero_extendqisi2
+ 589              		.loc 1 392 0
+ 590 0062 002A     		cmp	r2, #0
+ 591 0064 40F09080 		bne	.L85
+ 393:HANcoder_E407_GTSync.c ****     /* UnitDelay: '<S13>/Output' */
+ 394:HANcoder_E407_GTSync.c ****     rtb_Output = rtDWork.Output_DSTATE;
+ 592              		.loc 1 394 0
+ 593 0068 94F83460 		ldrb	r6, [r4, #52]	@ zero_extendqisi2
+ 594              	.LVL35:
+ 395:HANcoder_E407_GTSync.c **** 
+ 396:HANcoder_E407_GTSync.c ****     /* Sum: '<S15>/FixPt Sum1' incorporates:
+ 397:HANcoder_E407_GTSync.c ****      *  Constant: '<S15>/FixPt Constant'
+ 398:HANcoder_E407_GTSync.c ****      *  UnitDelay: '<S13>/Output'
+ 399:HANcoder_E407_GTSync.c ****      */
+ 400:HANcoder_E407_GTSync.c ****     rtb_FixPtSum1 = (uint8_T)((uint32_T)rtDWork.Output_DSTATE + ((uint8_T)1U));
+ 595              		.loc 1 400 0
+ 596 006c 06F1010B 		add	fp, r6, #1
+ 597 0070 5FFA8BFB 		uxtb	fp, fp
+ 598              	.LVL36:
+ 401:HANcoder_E407_GTSync.c **** 
+ 402:HANcoder_E407_GTSync.c ****     /* Switch: '<S16>/FixPt Switch' incorporates:
+ 403:HANcoder_E407_GTSync.c ****      *  Constant: '<S16>/Constant'
+ 404:HANcoder_E407_GTSync.c ****      */
+ 405:HANcoder_E407_GTSync.c ****     if (rtb_FixPtSum1 > ((uint8_T)1U)) {
+ 599              		.loc 1 405 0
+ 600 0074 BBF1010F 		cmp	fp, #1
+ 601 0078 40F29280 		bls	.L86
+ 602              	.LVL37:
+ 406:HANcoder_E407_GTSync.c ****       rtb_FixPtSum1 = ((uint8_T)0U);
+ 407:HANcoder_E407_GTSync.c ****     }
+ 408:HANcoder_E407_GTSync.c **** 
+ 409:HANcoder_E407_GTSync.c ****     /* End of Switch: '<S16>/FixPt Switch' */
+ 410:HANcoder_E407_GTSync.c ****   }
+ 411:HANcoder_E407_GTSync.c **** 
+ 412:HANcoder_E407_GTSync.c ****   if (rtM->Timing.TaskCounters.TID[2] == 0) {
+ 603              		.loc 1 412 0
+ 604 007c 002B     		cmp	r3, #0
+ 605 007e 40F0BE80 		bne	.L122
+ 406:HANcoder_E407_GTSync.c ****       rtb_FixPtSum1 = ((uint8_T)0U);
+ 606              		.loc 1 406 0
+ 607 0082 9B46     		mov	fp, r3
+ 608              	.LVL38:
+ 609              	.L87:
+ 413:HANcoder_E407_GTSync.c ****     /* UnitDelay: '<S14>/Output' */
+ 414:HANcoder_E407_GTSync.c ****     rtB.Output = rtDWork.Output_DSTATE_k;
+ 610              		.loc 1 414 0
+ 611 0084 94F83550 		ldrb	r5, [r4, #53]	@ zero_extendqisi2
+ 612 0088 89F80050 		strb	r5, [r9]
+ 415:HANcoder_E407_GTSync.c **** 
+ 416:HANcoder_E407_GTSync.c ****     /* Sum: '<S17>/FixPt Sum1' incorporates:
+ 417:HANcoder_E407_GTSync.c ****      *  Constant: '<S17>/FixPt Constant'
+ 418:HANcoder_E407_GTSync.c ****      */
+ 419:HANcoder_E407_GTSync.c ****     rtb_FixPtSum1_b = (uint8_T)((uint32_T)rtB.Output + ((uint8_T)1U));
+ 613              		.loc 1 419 0
+ 614 008c 0135     		adds	r5, r5, #1
+ 615 008e EDB2     		uxtb	r5, r5
+ 616              	.LVL39:
+ 420:HANcoder_E407_GTSync.c **** 
+ 421:HANcoder_E407_GTSync.c ****     /* Switch: '<S18>/FixPt Switch' incorporates:
+ 422:HANcoder_E407_GTSync.c ****      *  Constant: '<S18>/Constant'
+ 423:HANcoder_E407_GTSync.c ****      */
+ 424:HANcoder_E407_GTSync.c ****     if (rtb_FixPtSum1_b > ((uint8_T)1U)) {
+ 425:HANcoder_E407_GTSync.c ****       rtb_FixPtSum1_b = ((uint8_T)0U);
+ 617              		.loc 1 425 0
+ 618 0090 022D     		cmp	r5, #2
+ 619 0092 28BF     		it	cs
+ 620 0094 0025     		movcs	r5, #0
+ 621              	.LVL40:
+ 622              	.L103:
+ 426:HANcoder_E407_GTSync.c ****     }
+ 427:HANcoder_E407_GTSync.c **** 
+ 428:HANcoder_E407_GTSync.c ****     /* End of Switch: '<S18>/FixPt Switch' */
+ 429:HANcoder_E407_GTSync.c ****   }
+ 430:HANcoder_E407_GTSync.c **** 
+ 431:HANcoder_E407_GTSync.c ****   if (rtM->Timing.TaskCounters.TID[1] == 0) {
+ 432:HANcoder_E407_GTSync.c ****     /* M-S-Function: '<S51>/Level-2 M-file S-Function' */
+ 433:HANcoder_E407_GTSync.c ****     /* read from digital input */
+ 434:HANcoder_E407_GTSync.c ****     rtb_Level2MfileSFunction = DiginGet(DIGIN_PORTA_PIN0);
+ 623              		.loc 1 434 0
+ 624 0096 4720     		movs	r0, #71
+ 625 0098 FFF7FEFF 		bl	DiginGet
+ 626              	.LVL41:
+ 435:HANcoder_E407_GTSync.c **** 
+ 436:HANcoder_E407_GTSync.c ****     /* Switch: '<S2>/Switch' incorporates:
+ 437:HANcoder_E407_GTSync.c ****      *  Constant: '<S2>/Constant'
+ 438:HANcoder_E407_GTSync.c ****      *  Logic: '<S2>/Logical Operator'
+ 439:HANcoder_E407_GTSync.c ****      */
+ 440:HANcoder_E407_GTSync.c ****     if (HANtuneOverride || rtb_Level2MfileSFunction) {
+ 627              		.loc 1 440 0
+ 628 009c 5E4B     		ldr	r3, .L125+16
+ 629 009e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 630 00a0 002B     		cmp	r3, #0
+ 631 00a2 00F08180 		beq	.L123
+ 441:HANcoder_E407_GTSync.c ****       /* DataTypeConversion: '<S2>/Data Type Conversion' */
+ 442:HANcoder_E407_GTSync.c ****       LedValue = (rtb_Output != 0);
+ 632              		.loc 1 442 0
+ 633 00a6 0036     		adds	r6, r6, #0
+ 634 00a8 5C4B     		ldr	r3, .L125+20
+ 635 00aa 18BF     		it	ne
+ 636 00ac 0126     		movne	r6, #1
+ 637              	.LVL42:
+ 638 00ae 1E70     		strb	r6, [r3]
+ 443:HANcoder_E407_GTSync.c ****     } else {
+ 444:HANcoder_E407_GTSync.c ****       /* DataTypeConversion: '<S2>/Data Type Conversion' */
+ 445:HANcoder_E407_GTSync.c ****       LedValue = (rtB.Output != 0);
+ 446:HANcoder_E407_GTSync.c ****     }
+ 447:HANcoder_E407_GTSync.c **** 
+ 448:HANcoder_E407_GTSync.c ****     /* End of Switch: '<S2>/Switch' */
+ 449:HANcoder_E407_GTSync.c **** 
+ 450:HANcoder_E407_GTSync.c ****     /* Outputs for Triggered SubSystem: '<S53>/J-K Flip-Flop' incorporates:
+ 451:HANcoder_E407_GTSync.c ****      *  TriggerPort: '<S54>/Trigger'
+ 452:HANcoder_E407_GTSync.c ****      */
+ 453:HANcoder_E407_GTSync.c ****     if ((!rtb_Level2MfileSFunction) && (rtPrevZCSigState.JKFlipFlop_Trig_ZCE !=
+ 639              		.loc 1 453 0
+ 640 00b0 0028     		cmp	r0, #0
+ 641 00b2 00F08980 		beq	.L91
+ 642 00b6 5A4B     		ldr	r3, .L125+24
+ 643              	.L92:
+ 454:HANcoder_E407_GTSync.c ****          ZERO_ZCSIG)) {
+ 455:HANcoder_E407_GTSync.c ****       /* CombinatorialLogic: '<S54>/Logic' incorporates:
+ 456:HANcoder_E407_GTSync.c ****        *  Memory: '<S53>/TmpLatchAtJ-K Flip-FlopInport1'
+ 457:HANcoder_E407_GTSync.c ****        *  Memory: '<S54>/Memory'
+ 458:HANcoder_E407_GTSync.c ****        */
+ 459:HANcoder_E407_GTSync.c ****       rowIdx = (int32_T)(((((uint32_T)rtDWork.Memory_PreviousInput << 1) +
+ 460:HANcoder_E407_GTSync.c ****                            rtDWork.TmpLatchAtJKFlipFlopInport1_Pre) << 1) +
+ 461:HANcoder_E407_GTSync.c ****                          rtDWork.TmpLatchAtJKFlipFlopInport2_Pre);
+ 462:HANcoder_E407_GTSync.c ****       rtB.Logic[0U] = rtConstP.Logic_table[(uint32_T)rowIdx];
+ 463:HANcoder_E407_GTSync.c ****       rtB.Logic[1U] = rtConstP.Logic_table[rowIdx + 8U];
+ 464:HANcoder_E407_GTSync.c **** 
+ 465:HANcoder_E407_GTSync.c ****       /* Update for Memory: '<S54>/Memory' */
+ 466:HANcoder_E407_GTSync.c ****       rtDWork.Memory_PreviousInput = rtB.Logic[0];
+ 467:HANcoder_E407_GTSync.c ****     }
+ 468:HANcoder_E407_GTSync.c **** 
+ 469:HANcoder_E407_GTSync.c ****     rtPrevZCSigState.JKFlipFlop_Trig_ZCE = rtb_Level2MfileSFunction;
+ 644              		.loc 1 469 0
+ 645 00b8 1870     		strb	r0, [r3]
+ 646              	.LVL43:
+ 647              	.L104:
+ 470:HANcoder_E407_GTSync.c **** 
+ 471:HANcoder_E407_GTSync.c ****     /* End of Outputs for SubSystem: '<S53>/J-K Flip-Flop' */
+ 472:HANcoder_E407_GTSync.c ****   }
+ 473:HANcoder_E407_GTSync.c **** 
+ 474:HANcoder_E407_GTSync.c ****   /* DigitalClock: '<S6>/Digital Clock' */
+ 475:HANcoder_E407_GTSync.c ****   simulation_time = (((rtM->Timing.clockTick0+rtM->Timing.clockTickH0*
+ 648              		.loc 1 475 0
+ 649 00ba D8ED017A 		vldr.32	s15, [r8, #4]	@ int
+ 650 00be 9FED596A 		vldr.32	s12, .L125+28
+ 476:HANcoder_E407_GTSync.c ****                        4294967296.0)) * 0.01);
+ 651              		.loc 1 476 0
+ 652 00c2 DFED596A 		vldr.32	s13, .L125+32
+ 475:HANcoder_E407_GTSync.c ****                        4294967296.0)) * 0.01);
+ 653              		.loc 1 475 0
+ 654 00c6 594E     		ldr	r6, .L125+36
+ 655 00c8 B8EE677A 		vcvt.f32.u32	s14, s15
+ 656 00cc D8ED007A 		vldr.32	s15, [r8]	@ int
+ 657 00d0 F8EE677A 		vcvt.f32.u32	s15, s15
+ 658 00d4 E7EE067A 		vfma.f32	s15, s14, s12
+ 659              		.loc 1 476 0
+ 660 00d8 67EEA67A 		vmul.f32	s15, s15, s13
+ 661 00dc 17EE900A 		vmov	r0, s15
+ 662 00e0 FFF7FEFF 		bl	__aeabi_f2d
+ 663              	.LVL44:
+ 477:HANcoder_E407_GTSync.c **** 
+ 478:HANcoder_E407_GTSync.c ****   /* DataStoreRead: '<S1>/Data Store Read' */
+ 479:HANcoder_E407_GTSync.c ****   id = rtDWork.Board_ID;
+ 664              		.loc 1 479 0
+ 665 00e4 94ED027B 		vldr.64	d7, [r4, #8]
+ 666 00e8 514B     		ldr	r3, .L125+40
+ 476:HANcoder_E407_GTSync.c **** 
+ 667              		.loc 1 476 0
+ 668 00ea C6E90001 		strd	r0, [r6]
+ 669              		.loc 1 479 0
+ 670 00ee 83ED007B 		vstr.64	d7, [r3]
+ 671              	.LVL45:
+ 480:HANcoder_E407_GTSync.c **** 
+ 481:HANcoder_E407_GTSync.c ****   /* Constant: '<S3>/SampleTimeCrowBar' */
+ 482:HANcoder_E407_GTSync.c ****   rtb_SampleTimeCrowBar = true;
+ 483:HANcoder_E407_GTSync.c **** 
+ 484:HANcoder_E407_GTSync.c ****   /* M-S-Function: '<S56>/Level-2 M-file S-Function' */
+ 485:HANcoder_E407_GTSync.c ****   /* read the current CPU load */
+ 486:HANcoder_E407_GTSync.c ****   SI_CPUload = OsGetCpuLoad();
+ 672              		.loc 1 486 0
+ 673 00f2 FFF7FEFF 		bl	OsGetCpuLoad
+ 674              	.LVL46:
+ 675 00f6 4F4B     		ldr	r3, .L125+44
+ 676 00f8 1870     		strb	r0, [r3]
+ 487:HANcoder_E407_GTSync.c **** 
+ 488:HANcoder_E407_GTSync.c ****   /* M-S-Function: '<S57>/Level-2 M-file S-Function' */
+ 489:HANcoder_E407_GTSync.c ****   /* read the free heap size */
+ 490:HANcoder_E407_GTSync.c ****   SI_FreeHeap = OsGetFreeHeapSize();
+ 677              		.loc 1 490 0
+ 678 00fa FFF7FEFF 		bl	OsGetFreeHeapSize
+ 679              	.LVL47:
+ 680 00fe 4E4B     		ldr	r3, .L125+48
+ 681 0100 1860     		str	r0, [r3]
+ 491:HANcoder_E407_GTSync.c **** 
+ 492:HANcoder_E407_GTSync.c ****   /* M-S-Function: '<S58>/Level-2 M-file S-Function' */
+ 493:HANcoder_E407_GTSync.c ****   /* read the task's free stack size */
+ 494:HANcoder_E407_GTSync.c ****   SI_FreeStack = OsGetTaskFreeStackSize("AppCtrlTask");
+ 682              		.loc 1 494 0
+ 683 0102 4E48     		ldr	r0, .L125+52
+ 684 0104 FFF7FEFF 		bl	OsGetTaskFreeStackSize
+ 685              	.LVL48:
+ 686 0108 4D4B     		ldr	r3, .L125+56
+ 495:HANcoder_E407_GTSync.c **** 
+ 496:HANcoder_E407_GTSync.c ****   /* Update for M-S-Function: '<S55>/Level-2 M-file S-Function' */
+ 497:HANcoder_E407_GTSync.c ****   /* update digital output */
+ 498:HANcoder_E407_GTSync.c ****   if (rtB.DataStoreRead5 == 0) {
+ 687              		.loc 1 498 0
+ 688 010a 99F80110 		ldrb	r1, [r9, #1]	@ zero_extendqisi2
+ 494:HANcoder_E407_GTSync.c **** 
+ 689              		.loc 1 494 0
+ 690 010e 1860     		str	r0, [r3]
+ 691              		.loc 1 498 0
+ 692 0110 01B1     		cbz	r1, .L119
+ 499:HANcoder_E407_GTSync.c ****     DigoutSet(DIGOUT_PORTC_PIN13, DIGOUT_LOW);
+ 500:HANcoder_E407_GTSync.c ****   } else {
+ 501:HANcoder_E407_GTSync.c ****     DigoutSet(DIGOUT_PORTC_PIN13, DIGOUT_HIGH);
+ 693              		.loc 1 501 0
+ 694 0112 0121     		movs	r1, #1
+ 695              	.L119:
+ 696 0114 4720     		movs	r0, #71
+ 697 0116 FFF7FEFF 		bl	DigoutSet
+ 698              	.LVL49:
+ 502:HANcoder_E407_GTSync.c ****   }
+ 503:HANcoder_E407_GTSync.c **** 
+ 504:HANcoder_E407_GTSync.c ****   if (rtM->Timing.TaskCounters.TID[1] == 0) {
+ 699              		.loc 1 504 0
+ 700 011a 98F80930 		ldrb	r3, [r8, #9]	@ zero_extendqisi2
+ 701 011e 23B9     		cbnz	r3, .L96
+ 505:HANcoder_E407_GTSync.c ****     /* Update for UnitDelay: '<S13>/Output' */
+ 506:HANcoder_E407_GTSync.c ****     rtDWork.Output_DSTATE = rtb_FixPtSum1;
+ 507:HANcoder_E407_GTSync.c **** 
+ 508:HANcoder_E407_GTSync.c ****     /* Update for Memory: '<S53>/TmpLatchAtJ-K Flip-FlopInport1' incorporates:
+ 509:HANcoder_E407_GTSync.c ****      *  Constant: '<S8>/Constant'
+ 510:HANcoder_E407_GTSync.c ****      */
+ 511:HANcoder_E407_GTSync.c ****     rtDWork.TmpLatchAtJKFlipFlopInport1_Pre = true;
+ 702              		.loc 1 511 0
+ 703 0120 40F20113 		movw	r3, #257
+ 506:HANcoder_E407_GTSync.c **** 
+ 704              		.loc 1 506 0
+ 705 0124 84F834B0 		strb	fp, [r4, #52]
+ 706              		.loc 1 511 0
+ 707 0128 2387     		strh	r3, [r4, #56]	@ movhi
+ 708              	.L96:
+ 512:HANcoder_E407_GTSync.c **** 
+ 513:HANcoder_E407_GTSync.c ****     /* Update for Memory: '<S53>/TmpLatchAtJ-K Flip-FlopInport2' incorporates:
+ 514:HANcoder_E407_GTSync.c ****      *  Constant: '<S8>/Constant'
+ 515:HANcoder_E407_GTSync.c ****      */
+ 516:HANcoder_E407_GTSync.c ****     rtDWork.TmpLatchAtJKFlipFlopInport2_Pre = true;
+ 517:HANcoder_E407_GTSync.c ****   }
+ 518:HANcoder_E407_GTSync.c **** 
+ 519:HANcoder_E407_GTSync.c ****   if (rtM->Timing.TaskCounters.TID[2] == 0) {
+ 709              		.loc 1 519 0
+ 710 012a 98F80A30 		ldrb	r3, [r8, #10]	@ zero_extendqisi2
+ 711 012e 0BB9     		cbnz	r3, .L97
+ 520:HANcoder_E407_GTSync.c ****     /* Update for UnitDelay: '<S14>/Output' */
+ 521:HANcoder_E407_GTSync.c ****     rtDWork.Output_DSTATE_k = rtb_FixPtSum1_b;
+ 712              		.loc 1 521 0
+ 713 0130 84F83550 		strb	r5, [r4, #53]
+ 714              	.L97:
+ 522:HANcoder_E407_GTSync.c ****   }
+ 523:HANcoder_E407_GTSync.c **** 
+ 524:HANcoder_E407_GTSync.c ****   /* Update for M-S-Function: '<S22>/Level-2 M-file S-Function' incorporates:
+ 525:HANcoder_E407_GTSync.c ****    *  Constant: '<S6>/Constant1'
+ 526:HANcoder_E407_GTSync.c ****    *  Constant: '<S6>/Constant2'
+ 527:HANcoder_E407_GTSync.c ****    */
+ 528:HANcoder_E407_GTSync.c ****   /* schedule the next output compare event */
+ 529:HANcoder_E407_GTSync.c ****   TimeoutScheduleCompareEvent(TIMEOUT_TIM4_PIN_PD12, ((uint16_T)99U),
+ 715              		.loc 1 529 0
+ 716 0134 0322     		movs	r2, #3
+ 717 0136 6321     		movs	r1, #99
+ 718 0138 0720     		movs	r0, #7
+ 719 013a FFF7FEFF 		bl	TimeoutScheduleCompareEvent
+ 720              	.LVL50:
+ 530:HANcoder_E407_GTSync.c ****     (tTimeoutAction)((uint8_T)3U));
+ 531:HANcoder_E407_GTSync.c **** 
+ 532:HANcoder_E407_GTSync.c ****   /* Update absolute time for base rate */
+ 533:HANcoder_E407_GTSync.c ****   /* The "clockTick0" counts the number of times the code of this task has
+ 534:HANcoder_E407_GTSync.c ****    * been executed. The resolution of this integer timer is 0.01, which is the step size
+ 535:HANcoder_E407_GTSync.c ****    * of the task. Size of "clockTick0" ensures timer will not overflow during the
+ 536:HANcoder_E407_GTSync.c ****    * application lifespan selected.
+ 537:HANcoder_E407_GTSync.c ****    * Timer of this task consists of two 32 bit unsigned integers.
+ 538:HANcoder_E407_GTSync.c ****    * The two integers represent the low bits Timing.clockTick0 and the high bits
+ 539:HANcoder_E407_GTSync.c ****    * Timing.clockTickH0. When the low bit overflows to 0, the high bits increment.
+ 540:HANcoder_E407_GTSync.c ****    */
+ 541:HANcoder_E407_GTSync.c ****   rtM->Timing.clockTick0++;
+ 721              		.loc 1 541 0
+ 722 013e D8F80030 		ldr	r3, [r8]
+ 723 0142 0133     		adds	r3, r3, #1
+ 724 0144 C8F80030 		str	r3, [r8]
+ 542:HANcoder_E407_GTSync.c ****   if (!rtM->Timing.clockTick0) {
+ 725              		.loc 1 542 0
+ 726 0148 23B9     		cbnz	r3, .L98
+ 543:HANcoder_E407_GTSync.c ****     rtM->Timing.clockTickH0++;
+ 727              		.loc 1 543 0
+ 728 014a D8F80430 		ldr	r3, [r8, #4]
+ 729 014e 0133     		adds	r3, r3, #1
+ 730 0150 C8F80430 		str	r3, [r8, #4]
+ 731              	.L98:
+ 732              	.LBB32:
+ 733              	.LBB33:
+ 314:HANcoder_E407_GTSync.c ****   if ((rtM->Timing.TaskCounters.TID[1]) > 9) {/* Sample time: [0.1s, 0.0s] */
+ 734              		.loc 1 314 0
+ 735 0154 98F80930 		ldrb	r3, [r8, #9]	@ zero_extendqisi2
+ 736 0158 0133     		adds	r3, r3, #1
+ 737 015a DBB2     		uxtb	r3, r3
+ 315:HANcoder_E407_GTSync.c ****     rtM->Timing.TaskCounters.TID[1] = 0;
+ 738              		.loc 1 315 0
+ 739 015c 092B     		cmp	r3, #9
+ 316:HANcoder_E407_GTSync.c ****   }
+ 740              		.loc 1 316 0
+ 741 015e 88BF     		it	hi
+ 742 0160 0023     		movhi	r3, #0
+ 743 0162 88F80930 		strb	r3, [r8, #9]
+ 319:HANcoder_E407_GTSync.c ****   if ((rtM->Timing.TaskCounters.TID[2]) > 19) {/* Sample time: [0.2s, 0.0s] */
+ 744              		.loc 1 319 0
+ 745 0166 98F80A30 		ldrb	r3, [r8, #10]	@ zero_extendqisi2
+ 746 016a 0133     		adds	r3, r3, #1
+ 747 016c DBB2     		uxtb	r3, r3
+ 320:HANcoder_E407_GTSync.c ****     rtM->Timing.TaskCounters.TID[2] = 0;
+ 748              		.loc 1 320 0
+ 749 016e 132B     		cmp	r3, #19
+ 321:HANcoder_E407_GTSync.c ****   }
+ 750              		.loc 1 321 0
+ 751 0170 88BF     		it	hi
+ 752 0172 0023     		movhi	r3, #0
+ 753 0174 88F80A30 		strb	r3, [r8, #10]
+ 754              	.LBE33:
+ 755              	.LBE32:
+ 544:HANcoder_E407_GTSync.c ****   }
+ 545:HANcoder_E407_GTSync.c **** 
+ 546:HANcoder_E407_GTSync.c ****   rate_scheduler();
+ 547:HANcoder_E407_GTSync.c **** }
+ 756              		.loc 1 547 0
+ 757 0178 BDE8F88F 		pop	{r3, r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 758              	.LVL51:
+ 759              	.L116:
+ 382:HANcoder_E407_GTSync.c ****   }
+ 760              		.loc 1 382 0
+ 761 017c 254B     		ldr	r3, .L125+12
+ 762 017e 4646     		mov	r6, r8
+ 763              	.LVL52:
+ 764 0180 C3E90089 		strd	r8, [r3]
+ 765 0184 4F46     		mov	r7, r9
+ 766 0186 60E7     		b	.L84
+ 767              	.L85:
+ 412:HANcoder_E407_GTSync.c ****     /* UnitDelay: '<S14>/Output' */
+ 768              		.loc 1 412 0
+ 769 0188 002B     		cmp	r3, #0
+ 770 018a 96D1     		bne	.L104
+ 414:HANcoder_E407_GTSync.c **** 
+ 771              		.loc 1 414 0
+ 772 018c 94F83550 		ldrb	r5, [r4, #53]	@ zero_extendqisi2
+ 773 0190 89F80050 		strb	r5, [r9]
+ 419:HANcoder_E407_GTSync.c **** 
+ 774              		.loc 1 419 0
+ 775 0194 0135     		adds	r5, r5, #1
+ 776 0196 EDB2     		uxtb	r5, r5
+ 777              	.LVL53:
+ 425:HANcoder_E407_GTSync.c ****     }
+ 778              		.loc 1 425 0
+ 779 0198 022D     		cmp	r5, #2
+ 780 019a 28BF     		it	cs
+ 781 019c 0025     		movcs	r5, #0
+ 782              	.LVL54:
+ 783 019e 8CE7     		b	.L104
+ 784              	.LVL55:
+ 785              	.L86:
+ 412:HANcoder_E407_GTSync.c ****     /* UnitDelay: '<S14>/Output' */
+ 786              		.loc 1 412 0
+ 787 01a0 002B     		cmp	r3, #0
+ 788 01a2 3FF46FAF 		beq	.L87
+ 789 01a6 76E7     		b	.L103
+ 790              	.LVL56:
+ 791              	.L123:
+ 440:HANcoder_E407_GTSync.c ****       /* DataTypeConversion: '<S2>/Data Type Conversion' */
+ 792              		.loc 1 440 0 discriminator 1
+ 793 01a8 38B1     		cbz	r0, .L124
+ 442:HANcoder_E407_GTSync.c ****     } else {
+ 794              		.loc 1 442 0
+ 795 01aa 0036     		adds	r6, r6, #0
+ 796 01ac 1B4A     		ldr	r2, .L125+20
+ 797 01ae 1C4B     		ldr	r3, .L125+24
+ 798 01b0 18BF     		it	ne
+ 799 01b2 0126     		movne	r6, #1
+ 800              	.LVL57:
+ 801 01b4 1670     		strb	r6, [r2]
+ 469:HANcoder_E407_GTSync.c **** 
+ 802              		.loc 1 469 0
+ 803 01b6 1870     		strb	r0, [r3]
+ 804 01b8 7FE7     		b	.L104
+ 805              	.LVL58:
+ 806              	.L124:
+ 445:HANcoder_E407_GTSync.c ****     }
+ 807              		.loc 1 445 0
+ 808 01ba 99F80030 		ldrb	r3, [r9]	@ zero_extendqisi2
+ 809 01be 174A     		ldr	r2, .L125+20
+ 810 01c0 0033     		adds	r3, r3, #0
+ 811 01c2 18BF     		it	ne
+ 812 01c4 0123     		movne	r3, #1
+ 813 01c6 1370     		strb	r3, [r2]
+ 814              	.LVL59:
+ 815              	.L91:
+ 453:HANcoder_E407_GTSync.c ****          ZERO_ZCSIG)) {
+ 816              		.loc 1 453 0 discriminator 1
+ 817 01c8 154B     		ldr	r3, .L125+24
+ 818 01ca 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 819 01cc 002A     		cmp	r2, #0
+ 820 01ce 3FF473AF 		beq	.L92
+ 459:HANcoder_E407_GTSync.c ****                            rtDWork.TmpLatchAtJKFlipFlopInport1_Pre) << 1) +
+ 821              		.loc 1 459 0
+ 822 01d2 94F83A70 		ldrb	r7, [r4, #58]	@ zero_extendqisi2
+ 460:HANcoder_E407_GTSync.c ****                          rtDWork.TmpLatchAtJKFlipFlopInport2_Pre);
+ 823              		.loc 1 460 0
+ 824 01d6 94F83810 		ldrb	r1, [r4, #56]	@ zero_extendqisi2
+ 461:HANcoder_E407_GTSync.c ****       rtB.Logic[0U] = rtConstP.Logic_table[(uint32_T)rowIdx];
+ 825              		.loc 1 461 0
+ 826 01da 94F83920 		ldrb	r2, [r4, #57]	@ zero_extendqisi2
+ 462:HANcoder_E407_GTSync.c ****       rtB.Logic[1U] = rtConstP.Logic_table[rowIdx + 8U];
+ 827              		.loc 1 462 0
+ 828 01de 194E     		ldr	r6, .L125+60
+ 469:HANcoder_E407_GTSync.c **** 
+ 829              		.loc 1 469 0
+ 830 01e0 1870     		strb	r0, [r3]
+ 459:HANcoder_E407_GTSync.c ****                            rtDWork.TmpLatchAtJKFlipFlopInport1_Pre) << 1) +
+ 831              		.loc 1 459 0
+ 832 01e2 01EB4701 		add	r1, r1, r7, lsl #1
+ 460:HANcoder_E407_GTSync.c ****                          rtDWork.TmpLatchAtJKFlipFlopInport2_Pre);
+ 833              		.loc 1 460 0
+ 834 01e6 02EB4102 		add	r2, r2, r1, lsl #1
+ 835              	.LVL60:
+ 463:HANcoder_E407_GTSync.c **** 
+ 836              		.loc 1 463 0
+ 837 01ea B118     		adds	r1, r6, r2
+ 462:HANcoder_E407_GTSync.c ****       rtB.Logic[1U] = rtConstP.Logic_table[rowIdx + 8U];
+ 838              		.loc 1 462 0
+ 839 01ec B25C     		ldrb	r2, [r6, r2]	@ zero_extendqisi2
+ 840              	.LVL61:
+ 463:HANcoder_E407_GTSync.c **** 
+ 841              		.loc 1 463 0
+ 842 01ee 097A     		ldrb	r1, [r1, #8]	@ zero_extendqisi2
+ 843 01f0 89F80310 		strb	r1, [r9, #3]
+ 462:HANcoder_E407_GTSync.c ****       rtB.Logic[1U] = rtConstP.Logic_table[rowIdx + 8U];
+ 844              		.loc 1 462 0
+ 845 01f4 89F80220 		strb	r2, [r9, #2]
+ 466:HANcoder_E407_GTSync.c ****     }
+ 846              		.loc 1 466 0
+ 847 01f8 84F83A20 		strb	r2, [r4, #58]
+ 848 01fc 5DE7     		b	.L104
+ 849              	.LVL62:
+ 850              	.L122:
+ 406:HANcoder_E407_GTSync.c ****     }
+ 851              		.loc 1 406 0
+ 852 01fe 9346     		mov	fp, r2
+ 853 0200 49E7     		b	.L103
+ 854              	.L126:
+ 855 0202 00BFAFF3 		.align	3
+ 855      0080
+ 856              	.L125:
+ 857 0208 00000000 		.word	0
+ 858 020c 0088C340 		.word	1086556160
+ 859 0210 00000000 		.word	rtDWork
+ 860 0214 00000000 		.word	LED_local_ticks_signal
+ 861 0218 00000000 		.word	.LANCHOR0
+ 862 021c 00000000 		.word	LedValue
+ 863 0220 00000000 		.word	rtPrevZCSigState
+ 864 0224 0000804F 		.word	1333788672
+ 865 0228 0AD7233C 		.word	1008981770
+ 866 022c 00000000 		.word	simulation_time
+ 867 0230 00000000 		.word	id
+ 868 0234 00000000 		.word	SI_CPUload
+ 869 0238 00000000 		.word	SI_FreeHeap
+ 870 023c 00000000 		.word	.LC0
+ 871 0240 00000000 		.word	SI_FreeStack
+ 872 0244 00000000 		.word	rtConstP
+ 873 0248 00000000 		.word	rtM_
+ 874 024c 00000000 		.word	rtB
+ 875              		.cfi_endproc
+ 876              	.LFE117:
+ 878              		.section	.text.HANcoder_E407_GTSync_initialize,"ax",%progbits
+ 879              		.align	1
+ 880              		.p2align 2,,3
+ 881              		.global	HANcoder_E407_GTSync_initialize
+ 882              		.syntax unified
+ 883              		.thumb
+ 884              		.thumb_func
+ 885              		.fpu fpv4-sp-d16
+ 887              	HANcoder_E407_GTSync_initialize:
+ 888              	.LFB118:
+ 548:HANcoder_E407_GTSync.c **** 
+ 549:HANcoder_E407_GTSync.c **** /* Model initialize function */
+ 550:HANcoder_E407_GTSync.c **** void HANcoder_E407_GTSync_initialize(void)
+ 551:HANcoder_E407_GTSync.c **** {
+ 889              		.loc 1 551 0
+ 890              		.cfi_startproc
+ 891              		@ args = 0, pretend = 0, frame = 16
+ 892              		@ frame_needed = 0, uses_anonymous_args = 0
+ 893 0000 00B5     		push	{lr}
+ 894              		.cfi_def_cfa_offset 4
+ 895              		.cfi_offset 14, -4
+ 896              	.LBB34:
+ 552:HANcoder_E407_GTSync.c ****   {
+ 553:HANcoder_E407_GTSync.c ****     /* user code (Start function Header) */
+ 554:HANcoder_E407_GTSync.c ****     uint8_t canResult2;
+ 555:HANcoder_E407_GTSync.c ****     tCanFilter canFilter2;
+ 556:HANcoder_E407_GTSync.c **** 
+ 557:HANcoder_E407_GTSync.c ****     /* user code (Start function Body) */
+ 558:HANcoder_E407_GTSync.c **** 
+ 559:HANcoder_E407_GTSync.c ****     /* initialize the CAN driver. */
+ 560:HANcoder_E407_GTSync.c ****     CanInit(64, 8);
+ 897              		.loc 1 560 0
+ 898 0002 0821     		movs	r1, #8
+ 899              	.LBE34:
+ 551:HANcoder_E407_GTSync.c ****   {
+ 900              		.loc 1 551 0
+ 901 0004 85B0     		sub	sp, sp, #20
+ 902              		.cfi_def_cfa_offset 24
+ 903              	.LBB35:
+ 904              		.loc 1 560 0
+ 905 0006 4020     		movs	r0, #64
+ 906 0008 FFF7FEFF 		bl	CanInit
+ 907              	.LVL63:
+ 561:HANcoder_E407_GTSync.c **** 
+ 562:HANcoder_E407_GTSync.c ****     /* initialize the CAN I/O module for channel 2 */
+ 563:HANcoder_E407_GTSync.c ****     CanIoInit(1);
+ 908              		.loc 1 563 0
+ 909 000c 0120     		movs	r0, #1
+ 910 000e FFF7FEFF 		bl	CanIoInit
+ 911              	.LVL64:
+ 564:HANcoder_E407_GTSync.c **** 
+ 565:HANcoder_E407_GTSync.c ****     /* initialize the timer module for output compare. */
+ 566:HANcoder_E407_GTSync.c ****     TimeoutInitModule(TIMEOUT_MODULE_TIM4, 1000000);
+ 912              		.loc 1 566 0
+ 913 0012 2449     		ldr	r1, .L133
+ 914 0014 0320     		movs	r0, #3
+ 915 0016 FFF7FEFF 		bl	TimeoutInitModule
+ 916              	.LVL65:
+ 567:HANcoder_E407_GTSync.c **** 
+ 568:HANcoder_E407_GTSync.c ****     /* Start for M-S-Function: '<S55>/Level-2 M-file S-Function' */
+ 569:HANcoder_E407_GTSync.c **** 
+ 570:HANcoder_E407_GTSync.c ****     /* configure the digital output */
+ 571:HANcoder_E407_GTSync.c ****     DigoutConfigure(DIGOUT_PORTC_PIN13, DIGOUT_CFG_PUSHPULL);
+ 917              		.loc 1 571 0
+ 918 001a 0121     		movs	r1, #1
+ 919 001c 4720     		movs	r0, #71
+ 920 001e FFF7FEFF 		bl	DigoutConfigure
+ 921              	.LVL66:
+ 572:HANcoder_E407_GTSync.c **** 
+ 573:HANcoder_E407_GTSync.c ****     /* Start for M-S-Function: '<S51>/Level-2 M-file S-Function' */
+ 574:HANcoder_E407_GTSync.c **** 
+ 575:HANcoder_E407_GTSync.c ****     /* configure the digital input */
+ 576:HANcoder_E407_GTSync.c ****     DiginConfigure(DIGIN_PORTA_PIN0, DIGIN_CFG_PULLDOWN);
+ 922              		.loc 1 576 0
+ 923 0022 0221     		movs	r1, #2
+ 924 0024 4720     		movs	r0, #71
+ 925 0026 FFF7FEFF 		bl	DiginConfigure
+ 926              	.LVL67:
+ 577:HANcoder_E407_GTSync.c **** 
+ 578:HANcoder_E407_GTSync.c ****     /* Start for S-Function (sfcn_timeout_event_irq): '<S20>/S-Function' */
+ 579:HANcoder_E407_GTSync.c **** 
+ 580:HANcoder_E407_GTSync.c ****     /* register the callback handler */
+ 581:HANcoder_E407_GTSync.c ****     TimeoutRegisterCompareEventCallback(TIMEOUT_TIM4_PIN_PD12,
+ 927              		.loc 1 581 0
+ 928 002a 1F49     		ldr	r1, .L133+4
+ 929 002c 0720     		movs	r0, #7
+ 930 002e FFF7FEFF 		bl	TimeoutRegisterCompareEventCallback
+ 931              	.LVL68:
+ 582:HANcoder_E407_GTSync.c ****       TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12);
+ 583:HANcoder_E407_GTSync.c **** 
+ 584:HANcoder_E407_GTSync.c ****     /* End of Start for S-Function (sfcn_timeout_event_irq): '<S20>/S-Function' */
+ 585:HANcoder_E407_GTSync.c **** 
+ 586:HANcoder_E407_GTSync.c ****     /* Start for S-Function (sfcn_timeout_init): '<S21>/S-Function' */
+ 587:HANcoder_E407_GTSync.c **** 
+ 588:HANcoder_E407_GTSync.c ****     /* register the free running counter overflow callback handler */
+ 589:HANcoder_E407_GTSync.c ****     TimeoutRegisterOverflowCallback(TIMEOUT_MODULE_TIM4,
+ 932              		.loc 1 589 0
+ 933 0032 1E49     		ldr	r1, .L133+8
+ 934 0034 0320     		movs	r0, #3
+ 935 0036 FFF7FEFF 		bl	TimeoutRegisterOverflowCallback
+ 936              	.LVL69:
+ 590:HANcoder_E407_GTSync.c ****       TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4);
+ 591:HANcoder_E407_GTSync.c **** 
+ 592:HANcoder_E407_GTSync.c ****     /* Start for M-S-Function: '<S3>/Level-2 M-file S-Function' */
+ 593:HANcoder_E407_GTSync.c **** 
+ 594:HANcoder_E407_GTSync.c ****     /* configure the stack size for the task that executes the model */
+ 595:HANcoder_E407_GTSync.c ****     AppCtrlTaskSetStackSize((configMINIMAL_STACK_SIZE*sizeof(portBASE_TYPE)) + 0);
+ 937              		.loc 1 595 0
+ 938 003a 4FF40070 		mov	r0, #512
+ 939 003e FFF7FEFF 		bl	AppCtrlTaskSetStackSize
+ 940              	.LVL70:
+ 596:HANcoder_E407_GTSync.c **** 
+ 597:HANcoder_E407_GTSync.c ****     /* configure the sample time of the model in microseconds */
+ 598:HANcoder_E407_GTSync.c ****     AppCtrlTaskSetPeriod(10000);
+ 941              		.loc 1 598 0
+ 942 0042 42F21070 		movw	r0, #10000
+ 943 0046 FFF7FEFF 		bl	AppCtrlTaskSetPeriod
+ 944              	.LVL71:
+ 599:HANcoder_E407_GTSync.c **** 
+ 600:HANcoder_E407_GTSync.c ****     /* Run the ADC conversions ten times faster than the Simulink model */
+ 601:HANcoder_E407_GTSync.c ****     ADCconversionTaskSetPeriod(10000/10);
+ 945              		.loc 1 601 0
+ 946 004a 4FF47A70 		mov	r0, #1000
+ 947 004e FFF7FEFF 		bl	ADCconversionTaskSetPeriod
+ 948              	.LVL72:
+ 602:HANcoder_E407_GTSync.c **** 
+ 603:HANcoder_E407_GTSync.c ****     /* Start for M-S-Function: '<S4>/Level-2 M-file S-Function' */
+ 604:HANcoder_E407_GTSync.c **** 
+ 605:HANcoder_E407_GTSync.c ****     /* store the CAN controller's filter configuration */
+ 606:HANcoder_E407_GTSync.c ****     canFilter2.mask = 0x00000000;
+ 949              		.loc 1 606 0
+ 950 0052 0023     		movs	r3, #0
+ 607:HANcoder_E407_GTSync.c ****     canFilter2.code = 0x00000000;
+ 608:HANcoder_E407_GTSync.c ****     canFilter2.mode = CAN_FILTER_MODE_STDID_ONLY;
+ 609:HANcoder_E407_GTSync.c **** 
+ 610:HANcoder_E407_GTSync.c ****     /* connect and synchronize the CAN bus */
+ 611:HANcoder_E407_GTSync.c ****     canResult2 = CanConnect(1, 500000, &canFilter2);
+ 951              		.loc 1 611 0
+ 952 0054 01AA     		add	r2, sp, #4
+ 953 0056 1649     		ldr	r1, .L133+12
+ 606:HANcoder_E407_GTSync.c ****     canFilter2.code = 0x00000000;
+ 954              		.loc 1 606 0
+ 955 0058 0193     		str	r3, [sp, #4]
+ 956              		.loc 1 611 0
+ 957 005a 0120     		movs	r0, #1
+ 607:HANcoder_E407_GTSync.c ****     canFilter2.code = 0x00000000;
+ 958              		.loc 1 607 0
+ 959 005c 0293     		str	r3, [sp, #8]
+ 608:HANcoder_E407_GTSync.c **** 
+ 960              		.loc 1 608 0
+ 961 005e 8DF80C30 		strb	r3, [sp, #12]
+ 962              		.loc 1 611 0
+ 963 0062 FFF7FEFF 		bl	CanConnect
+ 964              	.LVL73:
+ 612:HANcoder_E407_GTSync.c ****     configASSERT(canResult2 == TRUE);
+ 965              		.loc 1 612 0
+ 966 0066 0128     		cmp	r0, #1
+ 967 0068 04D0     		beq	.L128
+ 968              		.loc 1 612 0 is_stmt 0 discriminator 1
+ 969 006a 4FF41971 		mov	r1, #612
+ 970 006e 1148     		ldr	r0, .L133+16
+ 971              	.LVL74:
+ 972 0070 FFF7FEFF 		bl	AssertFailure
+ 973              	.LVL75:
+ 974              	.L128:
+ 613:HANcoder_E407_GTSync.c **** 
+ 614:HANcoder_E407_GTSync.c ****     /* Start for M-S-Function: '<S11>/Level-2 M-file S-Function' */
+ 615:HANcoder_E407_GTSync.c **** 
+ 616:HANcoder_E407_GTSync.c ****     /* initialize the measurement and calibration interface */
+ 617:HANcoder_E407_GTSync.c ****     MacCanInit(1, 1637, 1638);
+ 975              		.loc 1 617 0 is_stmt 1
+ 976 0074 40F26662 		movw	r2, #1638
+ 977 0078 40F26561 		movw	r1, #1637
+ 978 007c 0120     		movs	r0, #1
+ 979 007e FFF7FEFF 		bl	MacCanInit
+ 980              	.LVL76:
+ 618:HANcoder_E407_GTSync.c ****     MacInit();
+ 981              		.loc 1 618 0
+ 982 0082 FFF7FEFF 		bl	MacInit
+ 983              	.LVL77:
+ 619:HANcoder_E407_GTSync.c **** 
+ 620:HANcoder_E407_GTSync.c ****     /* Start for M-S-Function: '<S12>/Level-2 M-file S-Function' */
+ 621:HANcoder_E407_GTSync.c **** 
+ 622:HANcoder_E407_GTSync.c ****     /* initialize the measurement and calibration interface */
+ 623:HANcoder_E407_GTSync.c ****     MacUsbComInit();
+ 984              		.loc 1 623 0
+ 985 0086 FFF7FEFF 		bl	MacUsbComInit
+ 986              	.LVL78:
+ 624:HANcoder_E407_GTSync.c ****     MacInit();
+ 987              		.loc 1 624 0
+ 988 008a FFF7FEFF 		bl	MacInit
+ 989              	.LVL79:
+ 990              	.LBE35:
+ 625:HANcoder_E407_GTSync.c ****   }
+ 626:HANcoder_E407_GTSync.c **** 
+ 627:HANcoder_E407_GTSync.c ****   rtPrevZCSigState.JKFlipFlop_Trig_ZCE = ZERO_ZCSIG;
+ 991              		.loc 1 627 0
+ 992 008e 0A4A     		ldr	r2, .L133+20
+ 628:HANcoder_E407_GTSync.c ****   rtPrevZCSigState.ResetFreeRunningCounter2.ResetFreeRunningCounter1_Trig_Z =
+ 629:HANcoder_E407_GTSync.c ****     POS_ZCSIG;
+ 630:HANcoder_E407_GTSync.c ****   rtPrevZCSigState.ResetFreeRunningCounter1_i.ResetFreeRunningCounter1_Trig_Z =
+ 631:HANcoder_E407_GTSync.c ****     POS_ZCSIG;
+ 632:HANcoder_E407_GTSync.c **** 
+ 633:HANcoder_E407_GTSync.c ****   /* SystemInitialize for Triggered SubSystem: '<S53>/J-K Flip-Flop' */
+ 634:HANcoder_E407_GTSync.c ****   /* SystemInitialize for Outport: '<S54>/!Q' */
+ 635:HANcoder_E407_GTSync.c ****   rtB.Logic[1] = true;
+ 993              		.loc 1 635 0
+ 994 0090 0A49     		ldr	r1, .L133+24
+ 628:HANcoder_E407_GTSync.c ****   rtPrevZCSigState.ResetFreeRunningCounter2.ResetFreeRunningCounter1_Trig_Z =
+ 995              		.loc 1 628 0
+ 996 0092 0123     		movs	r3, #1
+ 627:HANcoder_E407_GTSync.c ****   rtPrevZCSigState.ResetFreeRunningCounter2.ResetFreeRunningCounter1_Trig_Z =
+ 997              		.loc 1 627 0
+ 998 0094 0020     		movs	r0, #0
+ 999 0096 1070     		strb	r0, [r2]
+ 628:HANcoder_E407_GTSync.c ****   rtPrevZCSigState.ResetFreeRunningCounter2.ResetFreeRunningCounter1_Trig_Z =
+ 1000              		.loc 1 628 0
+ 1001 0098 5370     		strb	r3, [r2, #1]
+ 630:HANcoder_E407_GTSync.c ****     POS_ZCSIG;
+ 1002              		.loc 1 630 0
+ 1003 009a 9370     		strb	r3, [r2, #2]
+ 1004              		.loc 1 635 0
+ 1005 009c CB70     		strb	r3, [r1, #3]
+ 636:HANcoder_E407_GTSync.c **** 
+ 637:HANcoder_E407_GTSync.c ****   /* End of SystemInitialize for SubSystem: '<S53>/J-K Flip-Flop' */
+ 638:HANcoder_E407_GTSync.c **** }
+ 1006              		.loc 1 638 0
+ 1007 009e 05B0     		add	sp, sp, #20
+ 1008              		.cfi_def_cfa_offset 4
+ 1009              		@ sp needed
+ 1010 00a0 5DF804FB 		ldr	pc, [sp], #4
+ 1011              	.L134:
+ 1012              		.align	2
+ 1013              	.L133:
+ 1014 00a4 40420F00 		.word	1000000
+ 1015 00a8 00000000 		.word	TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12
+ 1016 00ac 00000000 		.word	TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4
+ 1017 00b0 20A10700 		.word	500000
+ 1018 00b4 00000000 		.word	.LC1
+ 1019 00b8 00000000 		.word	rtPrevZCSigState
+ 1020 00bc 00000000 		.word	rtB
+ 1021              		.cfi_endproc
+ 1022              	.LFE118:
+ 1024              		.global	rtM
+ 1025              		.comm	rtM_,12,4
+ 1026              		.comm	rtPrevZCSigState,3,4
+ 1027              		.comm	rtDWork,64,8
+ 1028              		.comm	rtB,4,4
+ 1029              		.global	HANtuneOverride
+ 1030              		.comm	even,1,1
+ 1031              		.comm	odd,1,1
+ 1032              		.comm	LedValue,1,1
+ 1033              		.comm	bc,1,1
+ 1034              		.comm	SI_CPUload,1,1
+ 1035              		.comm	tx_temp_counter,4,4
+ 1036              		.comm	local_ticks_interrupt,4,4
+ 1037              		.comm	SI_FreeStack,4,4
+ 1038              		.comm	SI_FreeHeap,4,4
+ 1039              		.comm	id,8,8
+ 1040              		.comm	simulation_time,8,8
+ 1041              		.comm	LED_local_ticks_signal,8,8
+ 1042              		.section	.bss.HANtuneOverride,"aw",%nobits
+ 1043              		.set	.LANCHOR0,. + 0
+ 1046              	HANtuneOverride:
+ 1047 0000 00       		.space	1
+ 1048              		.section	.rodata.HANcoder_E407_GTSync_initialize.str1.4,"aMS",%progbits,1
+ 1049              		.align	2
+ 1050              	.LC1:
+ 1051 0000 48414E63 		.ascii	"HANcoder_E407_GTSync.c\000"
+ 1051      6F646572 
+ 1051      5F453430 
+ 1051      375F4754 
+ 1051      53796E63 
+ 1052              		.section	.rodata.HANcoder_E407_GTSync_step.str1.4,"aMS",%progbits,1
+ 1053              		.align	2
+ 1054              	.LC0:
+ 1055 0000 41707043 		.ascii	"AppCtrlTask\000"
+ 1055      74726C54 
+ 1055      61736B00 
+ 1056              		.section	.rodata.rtM,"a",%progbits
+ 1057              		.align	2
+ 1060              	rtM:
+ 1061 0000 00000000 		.word	rtM_
+ 1062              		.text
+ 1063              	.Letext0:
+ 1064              		.file 2 "rtwtypes.h"
+ 1065              		.file 3 "zero_crossing_types.h"
+ 1066              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 1067              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 1068              		.file 6 "../blockset/rtw/STM32/inc/STM32_E407/timeout.h"
+ 1069              		.file 7 "../blockset/rtw/STM32/inc/STM32_E407/digout.h"
+ 1070              		.file 8 "../blockset/rtw/STM32/inc/STM32_E407/digin.h"
+ 1071              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\lib\\gcc\\arm-none-eabi
+ 1072              		.file 10 "../blockset/rtw/STM32/inc/STM32_E407/core_cm4.h"
+ 1073              		.file 11 "../blockset/rtw/STM32/inc/STM32_E407/system_stm32f4xx.h"
+ 1074              		.file 12 "../blockset/rtw/STM32/inc/STM32_E407/anin.h"
+ 1075              		.file 13 "../blockset/rtw/STM32/inc/STM32_E407/can.h"
+ 1076              		.file 14 "HANcoder_E407_GTSync_types.h"
+ 1077              		.file 15 "HANcoder_E407_GTSync.h"
+ 1078              		.file 16 "../blockset/rtw/STM32/inc/STM32_E407/canio.h"
+ 1079              		.file 17 "../blockset/rtw/STM32/inc/app.h"
+ 1080              		.file 18 "../blockset/rtw/STM32/inc/STM32_E407/FreeRTOSConfig.h"
+ 1081              		.file 19 "../blockset/rtw/STM32/inc/STM32_E407/mac.h"
+ 1082              		.file 20 "../blockset/rtw/STM32/inc/os.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 HANcoder_E407_GTSync.c
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:17     .text.TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:25     .text.TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4:00000000 TimeoutOverflowIRQ_TIMEOUT_MODULE_TIM4
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:40     .text.TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:48     .text.TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12:00000000 TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:378    .text.TimeoutEventIRQ_TIMEOUT_TIM4_PIN_PD12:000001b8 $d
+                            *COM*:00000004 rtB
+                            *COM*:00000040 rtDWork
+                            *COM*:00000001 even
+                            *COM*:00000001 odd
+                            *COM*:00000004 tx_temp_counter
+                            *COM*:00000001 bc
+                            *COM*:00000004 local_ticks_interrupt
+                            *COM*:00000003 rtPrevZCSigState
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:392    .text.ByteSwap_x:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:400    .text.ByteSwap_x:00000000 ByteSwap_x
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:469    .text.ResetFreeRunningCounter1:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:477    .text.ResetFreeRunningCounter1:00000000 ResetFreeRunningCounter1
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:517    .text.HANcoder_E407_GTSync_step:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:525    .text.HANcoder_E407_GTSync_step:00000000 HANcoder_E407_GTSync_step
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:857    .text.HANcoder_E407_GTSync_step:00000208 $d
+                            *COM*:00000008 LED_local_ticks_signal
+                            *COM*:00000001 LedValue
+                            *COM*:00000008 simulation_time
+                            *COM*:00000008 id
+                            *COM*:00000001 SI_CPUload
+                            *COM*:00000004 SI_FreeHeap
+                            *COM*:00000004 SI_FreeStack
+                            *COM*:0000000c rtM_
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:879    .text.HANcoder_E407_GTSync_initialize:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:887    .text.HANcoder_E407_GTSync_initialize:00000000 HANcoder_E407_GTSync_initialize
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:1014   .text.HANcoder_E407_GTSync_initialize:000000a4 $d
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:1060   .rodata.rtM:00000000 rtM
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:1046   .bss.HANtuneOverride:00000000 HANtuneOverride
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:1047   .bss.HANtuneOverride:00000000 $d
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:1049   .rodata.HANcoder_E407_GTSync_initialize.str1.4:00000000 $d
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:1053   .rodata.HANcoder_E407_GTSync_step.str1.4:00000000 $d
+C:\Users\Jamie\AppData\Local\Temp\cc6iKaR1.s:1057   .rodata.rtM:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_dcmpeq
+TimeoutResetFreeRunningCounter
+__aeabi_ui2d
+__aeabi_dadd
+__aeabi_dcmpgt
+__aeabi_f2d
+DiginGet
+OsGetCpuLoad
+OsGetFreeHeapSize
+OsGetTaskFreeStackSize
+DigoutSet
+TimeoutScheduleCompareEvent
+rtConstP
+CanInit
+CanIoInit
+TimeoutInitModule
+DigoutConfigure
+DiginConfigure
+TimeoutRegisterCompareEventCallback
+TimeoutRegisterOverflowCallback
+AppCtrlTaskSetStackSize
+AppCtrlTaskSetPeriod
+ADCconversionTaskSetPeriod
+CanConnect
+AssertFailure
+MacCanInit
+MacInit
+MacUsbComInit

@@ -1,0 +1,346 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 1
+  11              		.eabi_attribute 18, 4
+  12              		.file	"model.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.ModelBootCroMsgReceived,"ax",%progbits
+  17              		.align	1
+  18              		.p2align 2,,3
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu fpv4-sp-d16
+  24              	ModelBootCroMsgReceived:
+  25              	.LFB113:
+  26              		.file 1 "../blockset/rtw/STM32/lib/model.c"
+   1:../blockset/rtw/STM32/lib/model.c **** /************************************************************************************//**
+   2:../blockset/rtw/STM32/lib/model.c **** * \file         model.c
+   3:../blockset/rtw/STM32/lib/model.c **** * \brief        Interface to Simulink generated model source file
+   4:../blockset/rtw/STM32/lib/model.c **** * \internal
+   5:../blockset/rtw/STM32/lib/model.c **** *----------------------------------------------------------------------------------------
+   6:../blockset/rtw/STM32/lib/model.c **** *                          C O P Y R I G H T
+   7:../blockset/rtw/STM32/lib/model.c **** *----------------------------------------------------------------------------------------
+   8:../blockset/rtw/STM32/lib/model.c **** *  Copyright (c) 2013  by Feaser           http://www.feaser.com    All rights reserved
+   9:../blockset/rtw/STM32/lib/model.c **** *  Copyright (c) 2013  by HAN Automotive   http://www.han.nl        All rights reserved
+  10:../blockset/rtw/STM32/lib/model.c **** *
+  11:../blockset/rtw/STM32/lib/model.c **** *----------------------------------------------------------------------------------------
+  12:../blockset/rtw/STM32/lib/model.c **** *                            L I C E N S E
+  13:../blockset/rtw/STM32/lib/model.c **** *----------------------------------------------------------------------------------------
+  14:../blockset/rtw/STM32/lib/model.c **** * This file is part of the HANcoder Target Matlab/Simulink Blockset environment. For the
+  15:../blockset/rtw/STM32/lib/model.c **** * licensing terms, please contact HAN Automotive.
+  16:../blockset/rtw/STM32/lib/model.c **** *
+  17:../blockset/rtw/STM32/lib/model.c **** * This software has been carefully tested, but is not guaranteed for any particular
+  18:../blockset/rtw/STM32/lib/model.c **** * purpose. HAN Automotive does not offer any warranties and does not guarantee the
+  19:../blockset/rtw/STM32/lib/model.c **** * accuracy, adequacy, or completeness of the software and is not responsible for any
+  20:../blockset/rtw/STM32/lib/model.c **** * errors or omissions or the results obtained from use of the software.
+  21:../blockset/rtw/STM32/lib/model.c **** *
+  22:../blockset/rtw/STM32/lib/model.c **** * \endinternal
+  23:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+  24:../blockset/rtw/STM32/lib/model.c **** 
+  25:../blockset/rtw/STM32/lib/model.c **** 
+  26:../blockset/rtw/STM32/lib/model.c **** /****************************************************************************************
+  27:../blockset/rtw/STM32/lib/model.c **** * Include files
+  28:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+  29:../blockset/rtw/STM32/lib/model.c **** #include "model.h"
+  30:../blockset/rtw/STM32/lib/model.c **** #include "rtwtypes.h"
+  31:../blockset/rtw/STM32/lib/model.c **** #include "xcp_cfg.h"
+  32:../blockset/rtw/STM32/lib/model.c **** #include "xcp_par.h"
+  33:../blockset/rtw/STM32/lib/model.c **** #include "SYS_config.h"
+  34:../blockset/rtw/STM32/lib/model.c **** #include "anin.h"
+  35:../blockset/rtw/STM32/lib/model.c **** #if (HANcoder_BOOTLOADER > 0)
+  36:../blockset/rtw/STM32/lib/model.c **** #include "can.h"
+  37:../blockset/rtw/STM32/lib/model.c **** #include "canio.h"
+  38:../blockset/rtw/STM32/lib/model.c **** #include "os.h"
+  39:../blockset/rtw/STM32/lib/model.c **** #endif
+  40:../blockset/rtw/STM32/lib/model.c **** 
+  41:../blockset/rtw/STM32/lib/model.c **** /****************************************************************************************
+  42:../blockset/rtw/STM32/lib/model.c **** * Global data declarations
+  43:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+  44:../blockset/rtw/STM32/lib/model.c **** /** \brief Variable that holds the numder of analog channels with filtering */
+  45:../blockset/rtw/STM32/lib/model.c **** uint8_t nrFilteredADCchannels = NUMFILTEREDCHANNELS;
+  46:../blockset/rtw/STM32/lib/model.c **** 
+  47:../blockset/rtw/STM32/lib/model.c **** /***************************************************************************************
+  48:../blockset/rtw/STM32/lib/model.c **** * Pieces of code from xcp_par.c to be able to precompile the rest of the file
+  49:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+  50:../blockset/rtw/STM32/lib/model.c **** /* Slave device id */
+  51:../blockset/rtw/STM32/lib/model.c **** #if defined ( kXcpStationIdLength )
+  52:../blockset/rtw/STM32/lib/model.c **** 	/* Ticket #51 changed a define to a variable to make sure the value */
+  53:../blockset/rtw/STM32/lib/model.c **** 	/* is not fixed when compiling the library */
+  54:../blockset/rtw/STM32/lib/model.c **** 	short kXcpStationIdLengthVariable = kXcpStationIdLength;
+  55:../blockset/rtw/STM32/lib/model.c **** 	V_MEMROM0 MEMORY_ROM vuint8 kXcpStationId[kXcpStationIdLength] = kXcpStationIdString;
+  56:../blockset/rtw/STM32/lib/model.c **** #endif
+  57:../blockset/rtw/STM32/lib/model.c **** 
+  58:../blockset/rtw/STM32/lib/model.c **** #if defined ( XCP_ENABLE_DAQ_EVENT_INFO )
+  59:../blockset/rtw/STM32/lib/model.c **** 	V_MEMROM0 vuint8 MEMORY_ROM kXcpEventCycle[] =
+  60:../blockset/rtw/STM32/lib/model.c **** 	{
+  61:../blockset/rtw/STM32/lib/model.c **** 		(vuint8)(APP_CTRL_TASK_TIMING_US/100), (vuint8)(APP_CTRL_TASK_TIMING_US/100), (vuint8)(APP_CTRL_T
+  62:../blockset/rtw/STM32/lib/model.c **** 	};
+  63:../blockset/rtw/STM32/lib/model.c **** #endif
+  64:../blockset/rtw/STM32/lib/model.c **** 
+  65:../blockset/rtw/STM32/lib/model.c **** 
+  66:../blockset/rtw/STM32/lib/model.c **** /****************************************************************************************
+  67:../blockset/rtw/STM32/lib/model.c **** * Plausibility checks
+  68:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+  69:../blockset/rtw/STM32/lib/model.c **** #if ONESTEPFCN==0
+  70:../blockset/rtw/STM32/lib/model.c **** #error Separate output and update functions are not supported.
+  71:../blockset/rtw/STM32/lib/model.c **** #endif
+  72:../blockset/rtw/STM32/lib/model.c **** 
+  73:../blockset/rtw/STM32/lib/model.c **** #if MT==1
+  74:../blockset/rtw/STM32/lib/model.c **** #error Only single tasking is supported.
+  75:../blockset/rtw/STM32/lib/model.c **** #endif
+  76:../blockset/rtw/STM32/lib/model.c **** 
+  77:../blockset/rtw/STM32/lib/model.c **** 
+  78:../blockset/rtw/STM32/lib/model.c **** /****************************************************************************************
+  79:../blockset/rtw/STM32/lib/model.c **** * External function prototypes
+  80:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+  81:../blockset/rtw/STM32/lib/model.c **** #if defined(INCLUDE_FIRST_TIME_ARG) && INCLUDE_FIRST_TIME_ARG==0
+  82:../blockset/rtw/STM32/lib/model.c **** extern void MODEL_INITIALIZE();
+  83:../blockset/rtw/STM32/lib/model.c **** #else
+  84:../blockset/rtw/STM32/lib/model.c **** extern void MODEL_INITIALIZE(boolean_T firstTime);
+  85:../blockset/rtw/STM32/lib/model.c **** #endif
+  86:../blockset/rtw/STM32/lib/model.c **** extern void MODEL_TERMINATE(void);
+  87:../blockset/rtw/STM32/lib/model.c **** #if NUMST == 1
+  88:../blockset/rtw/STM32/lib/model.c **** extern void MODEL_STEP(void);                      /* single instance                  */
+  89:../blockset/rtw/STM32/lib/model.c **** #else
+  90:../blockset/rtw/STM32/lib/model.c **** extern void MODEL_STEP(int_T tid);                 /* multiple instance                */
+  91:../blockset/rtw/STM32/lib/model.c **** #endif
+  92:../blockset/rtw/STM32/lib/model.c **** 
+  93:../blockset/rtw/STM32/lib/model.c **** /****************************************************************************************
+  94:../blockset/rtw/STM32/lib/model.c **** * Function prototypes
+  95:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+  96:../blockset/rtw/STM32/lib/model.c **** #if (HANcoder_BOOTLOADER > 0)
+  97:../blockset/rtw/STM32/lib/model.c **** static void ModelBootCroMsgReceived(uint8_t dlc, uint8_t *data, uint32_t timestamp);
+  98:../blockset/rtw/STM32/lib/model.c **** #endif
+  99:../blockset/rtw/STM32/lib/model.c **** 
+ 100:../blockset/rtw/STM32/lib/model.c **** 
+ 101:../blockset/rtw/STM32/lib/model.c **** /************************************************************************************//**
+ 102:../blockset/rtw/STM32/lib/model.c **** ** \brief     Initializes the Simulink model.
+ 103:../blockset/rtw/STM32/lib/model.c **** ** \return    none.
+ 104:../blockset/rtw/STM32/lib/model.c **** **
+ 105:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+ 106:../blockset/rtw/STM32/lib/model.c **** void ModelInit(void)
+ 107:../blockset/rtw/STM32/lib/model.c **** {
+ 108:../blockset/rtw/STM32/lib/model.c ****   /* initialize the model */
+ 109:../blockset/rtw/STM32/lib/model.c **** #if defined(INCLUDE_FIRST_TIME_ARG) && INCLUDE_FIRST_TIME_ARG==0
+ 110:../blockset/rtw/STM32/lib/model.c ****   MODEL_INITIALIZE();
+ 111:../blockset/rtw/STM32/lib/model.c **** #else
+ 112:../blockset/rtw/STM32/lib/model.c ****   MODEL_INITIALIZE(1);
+ 113:../blockset/rtw/STM32/lib/model.c **** #endif
+ 114:../blockset/rtw/STM32/lib/model.c **** 
+ 115:../blockset/rtw/STM32/lib/model.c **** #if (HANcoder_BOOTLOADER > 0)
+ 116:../blockset/rtw/STM32/lib/model.c ****   /* register function that can re-activate the bootloader. note that this assumes the
+ 117:../blockset/rtw/STM32/lib/model.c ****    * model itself contains a CAN Config block, otherwise the CAN can CANIO modules
+ 118:../blockset/rtw/STM32/lib/model.c ****    * should be initialized here as well. If the bootloader's XCP CRO message identifier
+ 119:../blockset/rtw/STM32/lib/model.c ****    * is changed, it should be changed here as well.
+ 120:../blockset/rtw/STM32/lib/model.c ****    */
+ 121:../blockset/rtw/STM32/lib/model.c ****   CanIoRegisterMessageReceivedCallback(0, 0x667, ModelBootCroMsgReceived);
+ 122:../blockset/rtw/STM32/lib/model.c **** #endif
+ 123:../blockset/rtw/STM32/lib/model.c **** } /*** end of ModelInit ***/
+ 124:../blockset/rtw/STM32/lib/model.c **** 
+ 125:../blockset/rtw/STM32/lib/model.c **** 
+ 126:../blockset/rtw/STM32/lib/model.c **** /************************************************************************************//**
+ 127:../blockset/rtw/STM32/lib/model.c **** ** \brief     Runs the Simulink model. It is important that this function is called
+ 128:../blockset/rtw/STM32/lib/model.c **** **            with the same period time as the fixed steptime configuration in the
+ 129:../blockset/rtw/STM32/lib/model.c **** **            Simulink model itself.
+ 130:../blockset/rtw/STM32/lib/model.c **** ** \return    none.
+ 131:../blockset/rtw/STM32/lib/model.c **** **
+ 132:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+ 133:../blockset/rtw/STM32/lib/model.c **** void ModelStep(void)
+ 134:../blockset/rtw/STM32/lib/model.c **** {
+ 135:../blockset/rtw/STM32/lib/model.c ****   #if NUMST > 1
+ 136:../blockset/rtw/STM32/lib/model.c ****   /* perform a step of the model */
+ 137:../blockset/rtw/STM32/lib/model.c ****   MODEL_STEP(0);
+ 138:../blockset/rtw/STM32/lib/model.c **** #else
+ 139:../blockset/rtw/STM32/lib/model.c ****   /* perform a step of the model */
+ 140:../blockset/rtw/STM32/lib/model.c ****   MODEL_STEP();
+ 141:../blockset/rtw/STM32/lib/model.c **** #endif
+ 142:../blockset/rtw/STM32/lib/model.c **** } /*** end of ModelStep ***/
+ 143:../blockset/rtw/STM32/lib/model.c **** 
+ 144:../blockset/rtw/STM32/lib/model.c **** 
+ 145:../blockset/rtw/STM32/lib/model.c **** /************************************************************************************//**
+ 146:../blockset/rtw/STM32/lib/model.c **** ** \brief     Callback function that gets called each time the bootloader's XCP CRO
+ 147:../blockset/rtw/STM32/lib/model.c **** **            message was received. If the contents are the CONNECT command, then the
+ 148:../blockset/rtw/STM32/lib/model.c **** **            bootloader is started.
+ 149:../blockset/rtw/STM32/lib/model.c **** ** \param     dlc Number of bytes in the message.
+ 150:../blockset/rtw/STM32/lib/model.c **** ** \param     data Byte array with message data
+ 151:../blockset/rtw/STM32/lib/model.c **** ** \param     timestamp Message timestamp in ms.
+ 152:../blockset/rtw/STM32/lib/model.c **** ** \return    none.
+ 153:../blockset/rtw/STM32/lib/model.c **** **
+ 154:../blockset/rtw/STM32/lib/model.c **** ****************************************************************************************/
+ 155:../blockset/rtw/STM32/lib/model.c **** #if (HANcoder_BOOTLOADER > 0)
+ 156:../blockset/rtw/STM32/lib/model.c **** static void ModelBootCroMsgReceived(uint8_t dlc, uint8_t *data, uint32_t timestamp)
+ 157:../blockset/rtw/STM32/lib/model.c **** {
+  27              		.loc 1 157 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+ 158:../blockset/rtw/STM32/lib/model.c ****   /* check if this was an XCP CONNECT command */
+ 159:../blockset/rtw/STM32/lib/model.c ****   if ((data[0] == 0xff) && (data[1] == 0x00))
+  33              		.loc 1 159 0
+  34 0000 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+  35 0002 FF2B     		cmp	r3, #255
+  36 0004 00D0     		beq	.L4
+  37              	.L1:
+ 160:../blockset/rtw/STM32/lib/model.c ****   {
+ 161:../blockset/rtw/STM32/lib/model.c ****     /* perform software reset to activate the bootoader again */
+ 162:../blockset/rtw/STM32/lib/model.c ****     OsSystemReset();
+ 163:../blockset/rtw/STM32/lib/model.c ****   }
+ 164:../blockset/rtw/STM32/lib/model.c **** } /*** end of ModelBootCroMsgReceived ***/
+  38              		.loc 1 164 0
+  39 0006 7047     		bx	lr
+  40              	.L4:
+  41              	.LVL1:
+  42              	.LBB4:
+  43              	.LBB5:
+ 159:../blockset/rtw/STM32/lib/model.c ****   {
+  44              		.loc 1 159 0
+  45 0008 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+  46 000a 002B     		cmp	r3, #0
+  47 000c FBD1     		bne	.L1
+ 162:../blockset/rtw/STM32/lib/model.c ****   }
+  48              		.loc 1 162 0
+  49 000e FFF7FEBF 		b	OsSystemReset
+  50              	.LVL2:
+  51              	.LBE5:
+  52              	.LBE4:
+  53              		.cfi_endproc
+  54              	.LFE113:
+  56 0012 00BF     		.section	.text.ModelInit,"ax",%progbits
+  57              		.align	1
+  58              		.p2align 2,,3
+  59              		.global	ModelInit
+  60              		.syntax unified
+  61              		.thumb
+  62              		.thumb_func
+  63              		.fpu fpv4-sp-d16
+  65              	ModelInit:
+  66              	.LFB111:
+ 107:../blockset/rtw/STM32/lib/model.c ****   /* initialize the model */
+  67              		.loc 1 107 0
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 0, uses_anonymous_args = 0
+  71 0000 08B5     		push	{r3, lr}
+  72              		.cfi_def_cfa_offset 8
+  73              		.cfi_offset 3, -8
+  74              		.cfi_offset 14, -4
+ 112:../blockset/rtw/STM32/lib/model.c **** #endif
+  75              		.loc 1 112 0
+  76 0002 0120     		movs	r0, #1
+  77 0004 FFF7FEFF 		bl	HANcoder_E407_GTSync_initialize
+  78              	.LVL3:
+ 121:../blockset/rtw/STM32/lib/model.c **** #endif
+  79              		.loc 1 121 0
+  80 0008 034A     		ldr	r2, .L7
+  81 000a 40F26761 		movw	r1, #1639
+  82 000e 0020     		movs	r0, #0
+ 123:../blockset/rtw/STM32/lib/model.c **** 
+  83              		.loc 1 123 0
+  84 0010 BDE80840 		pop	{r3, lr}
+  85              		.cfi_restore 14
+  86              		.cfi_restore 3
+  87              		.cfi_def_cfa_offset 0
+ 121:../blockset/rtw/STM32/lib/model.c **** #endif
+  88              		.loc 1 121 0
+  89 0014 FFF7FEBF 		b	CanIoRegisterMessageReceivedCallback
+  90              	.LVL4:
+  91              	.L8:
+  92              		.align	2
+  93              	.L7:
+  94 0018 00000000 		.word	ModelBootCroMsgReceived
+  95              		.cfi_endproc
+  96              	.LFE111:
+  98              		.section	.text.ModelStep,"ax",%progbits
+  99              		.align	1
+ 100              		.p2align 2,,3
+ 101              		.global	ModelStep
+ 102              		.syntax unified
+ 103              		.thumb
+ 104              		.thumb_func
+ 105              		.fpu fpv4-sp-d16
+ 107              	ModelStep:
+ 108              	.LFB112:
+ 134:../blockset/rtw/STM32/lib/model.c ****   #if NUMST > 1
+ 109              		.loc 1 134 0
+ 110              		.cfi_startproc
+ 111              		@ args = 0, pretend = 0, frame = 0
+ 112              		@ frame_needed = 0, uses_anonymous_args = 0
+ 113              		@ link register save eliminated.
+ 137:../blockset/rtw/STM32/lib/model.c **** #else
+ 114              		.loc 1 137 0
+ 115 0000 0020     		movs	r0, #0
+ 116 0002 FFF7FEBF 		b	HANcoder_E407_GTSync_step
+ 117              	.LVL5:
+ 118              		.cfi_endproc
+ 119              	.LFE112:
+ 121              		.global	kXcpEventCycle
+ 122              		.global	kXcpStationId
+ 123              		.global	kXcpStationIdLengthVariable
+ 124              		.global	nrFilteredADCchannels
+ 125 0006 00BF     		.section	.bss.nrFilteredADCchannels,"aw",%nobits
+ 128              	nrFilteredADCchannels:
+ 129 0000 00       		.space	1
+ 130              		.section	.data.kXcpStationIdLengthVariable,"aw",%progbits
+ 131              		.align	1
+ 134              	kXcpStationIdLengthVariable:
+ 135 0000 3000     		.short	48
+ 136              		.section	.rodata.kXcpEventCycle,"a",%progbits
+ 137              		.align	2
+ 140              	kXcpEventCycle:
+ 141 0000 64       		.byte	100
+ 142 0001 64       		.byte	100
+ 143 0002 64       		.byte	100
+ 144              		.section	.rodata.kXcpStationId,"a",%progbits
+ 145              		.align	2
+ 148              	kXcpStationId:
+ 149 0000 48414E63 		.ascii	"HANcoder_E407_GTSync_softwareID_v1_280521_214428"
+ 149      6F646572 
+ 149      5F453430 
+ 149      375F4754 
+ 149      53796E63 
+ 150              		.text
+ 151              	.Letext0:
+ 152              		.file 2 "../blockset/rtw/STM32/inc/xcp_cfg.h"
+ 153              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 154              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\7 2017-q4-major\\arm-none-eabi\\include\
+ 155              		.file 5 "../blockset/rtw/STM32/inc/xcp_par.h"
+ 156              		.file 6 "../blockset/rtw/STM32/inc/STM32_E407/core_cm4.h"
+ 157              		.file 7 "../blockset/rtw/STM32/inc/STM32_E407/system_stm32f4xx.h"
+ 158              		.file 8 "../blockset/rtw/STM32/inc/STM32_E407/anin.h"
+ 159              		.file 9 "../blockset/rtw/STM32/inc/STM32_E407/canio.h"
+ 160              		.file 10 "../blockset/rtw/STM32/inc/os.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 model.c
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:17     .text.ModelBootCroMsgReceived:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:24     .text.ModelBootCroMsgReceived:00000000 ModelBootCroMsgReceived
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:57     .text.ModelInit:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:65     .text.ModelInit:00000000 ModelInit
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:94     .text.ModelInit:00000018 $d
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:99     .text.ModelStep:00000000 $t
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:107    .text.ModelStep:00000000 ModelStep
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:140    .rodata.kXcpEventCycle:00000000 kXcpEventCycle
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:148    .rodata.kXcpStationId:00000000 kXcpStationId
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:134    .data.kXcpStationIdLengthVariable:00000000 kXcpStationIdLengthVariable
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:128    .bss.nrFilteredADCchannels:00000000 nrFilteredADCchannels
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:129    .bss.nrFilteredADCchannels:00000000 $d
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:131    .data.kXcpStationIdLengthVariable:00000000 $d
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:137    .rodata.kXcpEventCycle:00000000 $d
+C:\Users\Jamie\AppData\Local\Temp\ccAyBHvL.s:145    .rodata.kXcpStationId:00000000 $d
+
+UNDEFINED SYMBOLS
+OsSystemReset
+HANcoder_E407_GTSync_initialize
+CanIoRegisterMessageReceivedCallback
+HANcoder_E407_GTSync_step
