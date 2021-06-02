@@ -18,7 +18,7 @@ LED_ticks_toggle = 10000; % 10000 local ticks to toggle LED (toggles every 1 sec
 cycle_duration = 50000; % cycle duration in NTU
 matrix_rows = 2;
 
-TM0 = 0;
+TM0 = 1;
 TM1 = 25000;
 TM2 = 37500;
 
