@@ -59,3 +59,8 @@ HANtuneOverride.Value = 0; % Initial value is set to zero, no override
 idle_time = Simulink.Parameter; % Define as parameter
 idle_time.StorageClass = 'ExportedGlobal'; % Only Exported Global will be visible in HANtune
 idle_time = hardware_granularity/(frequency_IRQ+1) * 5; 
+
+bussignal(1) = Simulink.BusElement;
+bussignal(1).Name = 'Q';
+vote_array = Simulink.Bus;
+vote_array.Elements = bussignal;
