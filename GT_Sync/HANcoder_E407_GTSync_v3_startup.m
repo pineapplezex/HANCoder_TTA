@@ -20,13 +20,14 @@ Master_Role = 1;
 Slave_Role = 2;
 
 % matrix scheduling constants
-basic_cycle_duration = 50000; % cycle duration in NTU
+basic_cycle_duration = 60000; % cycle duration in NTU
 matrix_rows = 2;
 
 TM0 = 0;
-TM1 = 25000;
-TM2 = 37500;
+TM1 = 20000;
+TM2 = 30000;
 TM3 = 40000;
+TM4 = 50000;
 
 % message constants
 Sync_ID = 1;
@@ -35,6 +36,7 @@ Vote2_ID = 22;
 Vote3_ID = 32;
 
 time_difference_threshold = 100;
+wrap_up_threshold = basic_cycle_duration - time_difference_threshold*10;
 
 %% Signals
 % Defining signals for viewing in HANtune
@@ -61,6 +63,10 @@ idle_time.StorageClass = 'ExportedGlobal'; % Only Exported Global will be visibl
 idle_time = hardware_granularity/(frequency_IRQ+1) * 5; 
 
 bussignal(1) = Simulink.BusElement;
-bussignal(1).Name = 'Q';
+bussignal(1).Name = 'First_Board';
+bussignal(2) = Simulink.BusElement;
+bussignal(2).Name = 'Second_Board';
+bussignal(3) = Simulink.BusElement;
+bussignal(3).Name = 'Third_Board';
 vote_array = Simulink.Bus;
 vote_array.Elements = bussignal;
