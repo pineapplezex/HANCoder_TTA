@@ -23,7 +23,7 @@ Slave_Role = 2;
 basic_cycle_duration = 60000; % cycle duration in NTU
 matrix_rows = 2;
 
-TM0 = 0;
+TM0 = 100;
 TM1 = 20000;
 TM2 = 30000;
 TM3 = 40000;
