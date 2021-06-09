@@ -35,7 +35,9 @@ Vote1_ID = 12;
 Vote2_ID = 22;
 Vote3_ID = 32;
 
-time_difference_threshold = 100;
+
+comm_delay_estimation = 3; % 3 ticks [0.3 ms]
+time_difference_threshold = 100; % 100 ticks [10 ms]
 wrap_up_threshold = basic_cycle_duration - time_difference_threshold*10;
 
 %% Signals
