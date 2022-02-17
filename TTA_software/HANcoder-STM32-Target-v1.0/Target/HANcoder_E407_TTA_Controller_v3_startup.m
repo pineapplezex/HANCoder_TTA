@@ -54,6 +54,7 @@ COMM_Phase_init2.Value = 5;
 COMM_Phase2 = Simulink.Parameter; % Define as parameter
 COMM_Phase2.StorageClass = 'ExportedGlobal'; % Only Exported Global will be visible in HANtune
 COMM_Phase2.Value = 10;
+
 % max number of messages
 Tx_bit_number = 3; % This is hardcoded in the Tx buffer update of the COMM tasks
 max_num_msgs_CAN1 = 2^Tx_bit_number-1;
@@ -64,6 +65,32 @@ DEBUG_wait = 20000; % insert this in a TM to make the system wait there for DEBU
 basic_cycle_start = 0;
 COMM_duration = COMM_Period;
 COMP_duration = 4;
+
+% Message IDentification numbers
+Sync_ID = 1;
+Vote1_ID = 11;
+Vote2_ID = 12;
+Vote3_ID = 13;
+SetValues_ID = 21;
+SensorValues_ID = 22;
+OutControl1_ID = 23;
+OutControl2_ID = 24;
+OutEmulator_ID = 25;
+
+% Communication delay: time from message sent until message received
+comm_delay_measured1 = 0.0003; % [1Mb/s -> 0.3 ms]
+comm_delay_measured2 = 0.0003; % [250kb/s -> 0.7 ms]
+comm_delay_estimation1 = ...
+    round(comm_delay_measured1*hardware_granularity/frequency_IRQ); % comm_delay in ticks 
+comm_delay_estimation2 = ...
+    round(comm_delay_measured2*hardware_granularity/frequency_IRQ); 
+
+% Maximum desync: maximum allowed ticks to be corrected by Desync (Update
+% LT) during a basic cycle
+max_desync = 15;
+min_desync = (-1)*max_desync;
+
+
 %% Definition of Time marks
 % Time mark types
 COMM = 0;
@@ -220,33 +247,8 @@ basic_cycle_duration_bc1 = TM_Reset_Var_bc1 + COMP_duration; % cycle duration in
 matrix_cycle_duration = basic_cycle_duration_bc0 + basic_cycle_duration_bc1; % cycle duration in NTU
 matrix_rows = 2;
 
-% Message IDentification numbers
-Sync_ID = 1;
-Vote1_ID = 11;
-Vote2_ID = 12;
-Vote3_ID = 13;
-SetValues_ID = 21;
-SensorValues_ID = 22;
-OutControl1_ID = 23;
-OutControl2_ID = 24;
-OutEmulator_ID = 25;
-
-% Communication delay: time from message sent until message received
-comm_delay_measured1 = 0.0003; % [1Mb/s -> 0.3 ms]
-comm_delay_measured2 = 0.0003; % [250kb/s -> 0.7 ms]
-comm_delay_estimation1 = ...
-    round(comm_delay_measured1*hardware_granularity/frequency_IRQ); % comm_delay in ticks 
-comm_delay_estimation2 = ...
-    round(comm_delay_measured2*hardware_granularity/frequency_IRQ); 
-
-% Maximum desync: maximum allowed ticks to be corrected by Desync (Update
-% LT) during a basic cycle
-max_desync = 15;
-min_desync = (-1)*max_desync;
-
 % Initialization
 idle_time_init = basic_cycle_duration_bc0 + basic_cycle_duration_bc1; % time waiting by Board 1 before becoming Master
-
 
 %% Value domain constants
 %   Name            Definition          U       Range       Value   Prec
@@ -347,7 +349,12 @@ speed_k_d.Value = 0;
 script_run = Simulink.Parameter; % Define as parameter
 script_run.StorageClass = 'ExportedGlobal'; % Only Exported Global will be visible in HANtune
 script_run.DataType = 'double';
-script_run.Value = 0; 
+script_run.Value = 0;
+
+% Defining a parameter for editing in HANtune
+HANtuneOverride = Simulink.Parameter; % Define as parameter
+HANtuneOverride.StorageClass = 'ExportedGlobal'; % Only Exported Global will be visible in HANtune
+HANtuneOverride.Value = 0; % Initial value is set to zero, no override
 
 %% Signals
 % Defining signals for viewing in HANtune
@@ -361,12 +368,6 @@ SI_CPUload = Simulink.Signal;
 SI_CPUload.StorageClass = 'ExportedGlobal';
 SI_FreeHeap = Simulink.Signal;
 SI_FreeHeap.StorageClass = 'ExportedGlobal';
-
-%% Parameters
-% Defining a parameter for editing in HANtune
-HANtuneOverride = Simulink.Parameter; % Define as parameter
-HANtuneOverride.StorageClass = 'ExportedGlobal'; % Only Exported Global will be visible in HANtune
-HANtuneOverride.Value = 0; % Initial value is set to zero, no override
 
 
 %% Bus type definitions
